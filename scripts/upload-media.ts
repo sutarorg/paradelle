@@ -16,10 +16,9 @@ import { productImages } from "../src/db/schema";
 const BUCKET = "product-media";
 
 const FILES = [
-  "products/milk-front.webp", "products/milk-angle.webp",
-  "products/dark-front.webp", "products/dark-angle.webp",
-  "products/nut-front.webp", "products/nut-angle.webp",
-  "products/pistachio-front.webp", "products/pistachio-angle.webp",
+  ...["signature-milk", "signature-dark", "crunchy-nut", "pistachio-filled"].flatMap((s) =>
+    [1, 2, 3, 4].map((n) => `products/${s}-${n}.webp`),
+  ),
   "hero.webp", "gifting.webp",
 ];
 
