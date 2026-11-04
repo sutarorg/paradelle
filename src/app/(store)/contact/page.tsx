@@ -7,8 +7,19 @@ import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
 export const metadata = pageMetadata({
   path: "/contact",
-  title: "Contact | PARADELLE CHOCOLATES",
-  description: "Write to the PARADELLE atelier — orders, gifting, wholesale and press.",
+  title: "Contact Paradelle Chocolates | Customer Support",
+  description:
+    "Get in touch with Paradelle Chocolates for assistance with orders, products, delivery enquiries, customer support and general business enquiries.",
+  keywords: [
+    "contact Paradelle",
+    "customer support",
+    "chocolate order assistance",
+    "delivery enquiries",
+    "customer service",
+    "contact details",
+    "order support India",
+    "brand enquiries",
+  ],
   image: SOCIAL_IMAGE_BY_PAGE.contact,
 });
 

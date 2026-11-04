@@ -9,8 +9,19 @@ import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
 export const metadata = pageMetadata({
   path: "/faqs",
-  title: "FAQs | PARADELLE CHOCOLATES",
-  description: "Shipping, payments, storage, gifting and allergen answers — plainly stated.",
+  title: "Chocolate Shopping & Delivery FAQs | Paradelle Chocolates",
+  description:
+    "Find answers to common questions about Paradelle chocolates, products, ordering, prepaid payments, shipping, delivery, cancellations and refunds.",
+  keywords: [
+    "Paradelle FAQs",
+    "chocolate questions",
+    "chocolate orders India",
+    "premium chocolate delivery",
+    "payment information",
+    "online shopping help",
+    "shipping questions",
+    "order tracking",
+  ],
   image: SOCIAL_IMAGE_BY_PAGE.faqs,
 });
 

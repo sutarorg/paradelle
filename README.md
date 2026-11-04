@@ -122,7 +122,7 @@ public/images/hero.webp  gifting.webp                                  ← edito
 public/images/logo.png                                                 ← official crest (unmodified)
 ```
 
-The four supplied Drive photos for each product are stored in the requested order as compressed WebP. The database migration `supabase/migrations/20261104_storefront_media_shipping.sql` replaces existing product image rows and sets the ₹499 free-shipping threshold. To use Supabase Storage, run `npx tsx scripts/upload-media.ts` after the migration.
+The four supplied Drive photos for each product are stored in the requested order as compressed WebP. The database migration `supabase/migrations/20261104_storefront_media_shipping.sql` replaces existing product image rows and sets the ₹499 free-shipping threshold. It is safe to run before the product seed; in that case, it skips absent products and `scripts/seed.ts` creates them with the supplied galleries. To use Supabase Storage, run `npx tsx scripts/upload-media.ts` after the migration.
 
 > ⚠️ **Confirm before launch:** ingredient decks, cocoa percentages, allergen statements and nutrition values in `src/lib/products.ts` are realistic industry-typical placeholders. Replace with laboratory/production specifications. Contact emails (`hello@`, `privacy@paradelle.store`) and the atelier city are configurable brand constants.
 

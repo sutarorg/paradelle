@@ -7,16 +7,72 @@ import { getContent, type PolicyContent } from "@/lib/cms";
 import { Reveal } from "@/components/reveal";
 import { Kicker } from "@/components/ui";
 import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
-import { pageMetadata, siteTitle, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE, type PageSeo } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
 const KEYS = Object.keys(POLICIES) as PolicyKey[];
-const POLICY_DESCRIPTIONS: Record<PolicyKey, string> = {
-  shipping: "PARADELLE shipping charges, delivery timelines and insulated chocolate packaging across India.",
-  refunds: "Read the PARADELLE refund and replacement policy for melted, damaged or incorrect chocolate orders.",
-  privacy: "How PARADELLE handles account, order and newsletter information, plus customer privacy choices.",
-  terms: "PARADELLE terms for chocolate orders, pricing, availability, prepaid payments and customer accounts.",
+const POLICY_SEO: Record<PolicyKey, PageSeo> = {
+  shipping: {
+    title: "Shipping & Delivery Policy | Paradelle Chocolates",
+    description:
+      "Read Paradelle's shipping and delivery policy for order processing, delivery coverage, estimated timelines, shipping charges and order tracking information.",
+    keywords: [
+      "shipping policy",
+      "chocolate delivery India",
+      "premium chocolate shipping",
+      "online delivery",
+      "shipping charges",
+      "delivery timelines",
+      "order tracking",
+      "shipping terms",
+    ],
+  },
+  refunds: {
+    title: "Cancellation & Refund Policy | Paradelle Chocolates",
+    description:
+      "Review Paradelle's cancellation and refund policy, including order cancellation procedures, refund eligibility, payment reversals and customer support.",
+    keywords: [
+      "refund policy",
+      "chocolate order cancellation",
+      "online chocolate refund India",
+      "refund terms",
+      "prepaid order cancellation",
+      "payment refund",
+      "cancellation policy",
+      "refund assistance",
+    ],
+  },
+  privacy: {
+    title: "Privacy Policy | Paradelle Chocolates",
+    description:
+      "Understand how Paradelle Chocolates collects, uses, stores and protects personal information relating to customer accounts, online orders and website interactions.",
+    keywords: [
+      "privacy policy",
+      "customer data privacy",
+      "personal information protection",
+      "ecommerce privacy India",
+      "account privacy",
+      "data protection",
+      "information security",
+      "data practices",
+    ],
+  },
+  terms: {
+    title: "Terms & Conditions | Paradelle Chocolates",
+    description:
+      "Read the terms and conditions governing Paradelle Chocolates, including online purchases, prepaid payments, orders, delivery and customer responsibilities.",
+    keywords: [
+      "terms and conditions",
+      "ecommerce terms India",
+      "online purchase conditions",
+      "prepaid payment terms",
+      "customer purchase policy",
+      "order conditions",
+      "website terms",
+      "shopping agreement",
+    ],
+  },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -26,8 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const key = slug as PolicyKey;
   return pageMetadata({
     path: `/legal/${key}`,
-    title: siteTitle(policy.title),
-    description: POLICY_DESCRIPTIONS[key],
+    ...POLICY_SEO[key],
     image: SOCIAL_IMAGE_BY_PAGE[key],
   });
 }

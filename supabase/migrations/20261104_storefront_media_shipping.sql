@@ -1,6 +1,7 @@
--- Replace the four product galleries with the owner-supplied image sequence and
--- align all shipping rules/copy with free delivery from ₹499.
--- Run after 20260104_phase3_backend.sql and scripts/seed.ts.
+-- Replace any existing product galleries with the owner-supplied image sequence
+-- and align shipping rules/copy with free delivery from ₹499.
+-- Run after 20260104_phase3_backend.sql. This is safe before or after scripts/seed.ts:
+-- absent product rows are skipped here and the current seed inserts their galleries.
 BEGIN;
 
 DO $$
@@ -18,7 +19,7 @@ BEGIN
   WHERE NOT EXISTS (SELECT 1 FROM products WHERE products.slug = required.slug);
 
   IF missing_slugs IS NOT NULL THEN
-    RAISE EXCEPTION 'Seed the four storefront products before applying this update. Missing: %', missing_slugs;
+    RAISE NOTICE 'Products not seeded yet (%). Existing product galleries will be updated; run scripts/seed.ts to create missing products with supplied galleries.', missing_slugs;
   END IF;
 END $$;
 
