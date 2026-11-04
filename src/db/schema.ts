@@ -369,7 +369,7 @@ export const shippingRules = pgTable("shipping_rules", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull().default("Standard (all India)"),
   flatFeePaise: integer("flat_fee_paise").notNull().default(9900),
-  freeThresholdPaise: integer("free_threshold_paise").notNull().default(150000),
+  freeThresholdPaise: integer("free_threshold_paise").notNull().default(49900),
   active: boolean("active").notNull().default(true),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });

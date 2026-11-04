@@ -40,24 +40,65 @@ function template(event: OrderEmailEvent, order: OrderRow, extra?: { trackingUrl
   }
 }
 
-export async function sendOrderEmail(event: OrderEmailEvent, order: OrderRow, extra?: { trackingUrl?: string; amount?: number }) {
-  const { subject, text } = template(event, order, extra);
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM ?? `${BRAND} <orders@paradelle.store>`;
-  if (!key) {
-    console.log(`[email:queued-local] ${event} → ${order.email} :: ${subject}`);
-    return { sent: false };
+export type EmailSendResult = { sent: true } | { sent: false; reason: "not_configured" | "provider_error" };
+
+type EmailMessage = { to: string; subject: string; text: string; replyTo?: string };
+
+const ownerInbox = () => process.env.CONTACT_NOTIFICATION_EMAIL?.trim() || "tejassutar.business@gmail.com";
+
+async function sendEmailMessage(message: EmailMessage, options: { inboundNotification?: boolean } = {}): Promise<EmailSendResult> {
+  const key = process.env.RESEND_API_KEY?.trim();
+  const from = process.env.RESEND_FROM?.trim() || `${BRAND} <orders@paradelle.store>`;
+  if ((options.inboundNotification && process.env.ENABLE_INBOUND_EMAIL_NOTIFICATIONS !== "true") || !key) {
+    return { sent: false, reason: "not_configured" };
   }
+
   try {
-    const res = await fetch("https://api.resend.com/emails", {
+    const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-      body: JSON.stringify({ from, to: order.email, subject, text }),
+      body: JSON.stringify({
+        from,
+        to: message.to,
+        subject: message.subject,
+        text: message.text,
+        ...(message.replyTo ? { reply_to: message.replyTo } : {}),
+      }),
     });
-    if (!res.ok) console.error("email:send failed", res.status, await res.text());
-    return { sent: res.ok };
-  } catch (err) {
-    console.error("email:send error", err);
-    return { sent: false };
+    if (!response.ok) {
+      console.error("email:send failed", response.status);
+      return { sent: false, reason: "provider_error" };
+    }
+    return { sent: true };
+  } catch (error) {
+    console.error("email:send error", error instanceof Error ? error.message : "provider request failed");
+    return { sent: false, reason: "provider_error" };
   }
+}
+
+export function sendContactMessageNotification(message: { name: string; email: string; message: string }) {
+  const safeName = message.name.replace(/[\r\n]+/g, " ").slice(0, 120);
+  return sendEmailMessage({
+    to: ownerInbox(),
+    replyTo: message.email,
+    subject: `Website contact message from ${safeName}`,
+    text: `Name: ${safeName}\nEmail: ${message.email}\n\nMessage:\n${message.message}`,
+  }, { inboundNotification: true });
+}
+
+export function sendNewsletterSubscriberListNotification(emails: string[]) {
+  return sendEmailMessage({
+    to: ownerInbox(),
+    subject: `Newsletter subscriber list updated (${emails.length})`,
+    text: `Current newsletter subscribers (${emails.length}):\n\n${emails.join(", ")}`,
+  }, { inboundNotification: true });
+}
+
+export async function sendOrderEmail(event: OrderEmailEvent, order: OrderRow, extra?: { trackingUrl?: string; amount?: number }) {
+  const { subject, text } = template(event, order, extra);
+  const result = await sendEmailMessage({ to: order.email, subject, text });
+  if (!result.sent && result.reason === "not_configured") {
+    console.log(`[email:queued-local] ${event} :: ${subject}`);
+  }
+  return result;
 }

@@ -163,7 +163,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </p>
               </div>
               <p className="mt-1.5 text-[12px] text-espresso/45">
-                ({formatINR(pricePer100g(product))} per 100 g) &middot; Free shipping on orders of ₹1,500+
+                ({formatINR(pricePer100g(product))} per 100 g) &middot; Free shipping on orders of ₹499+
               </p>
               {availableStock > 0 && availableStock <= product.lowStockThreshold ? (
                 <p className="mt-2 text-[12px] font-medium text-bronze">Small batch — {availableStock} bars currently at the atelier.</p>
@@ -175,14 +175,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             <AddToCart product={product} />
 
-            <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <ul className="mt-8 grid grid-cols-1 gap-3 min-[480px]:grid-cols-3">
               {[
                 { icon: ShieldCheck, label: "Razorpay secure" },
                 { icon: Truck, label: "Insulated delivery" },
                 { icon: RotateCcw, label: "48-hr melt promise" },
               ].map((t) => (
-                <li key={t.label} className="flex items-center gap-2.5 rounded-xl border border-espresso/10 bg-cream px-4 py-3 text-[12px] font-medium text-espresso/70">
-                  <t.icon className="h-4 w-4 shrink-0 text-bronze" strokeWidth={1.7} /> {t.label}
+                <li key={t.label} className="flex min-h-14 min-w-0 items-center justify-center gap-2 rounded-xl border border-espresso/15 bg-cream px-3 py-3 text-center text-[12px] font-semibold leading-tight text-espresso">
+                  <t.icon className="h-4 w-4 shrink-0 text-bronze" strokeWidth={1.7} />
+                  <span className="min-w-0">{t.label}</span>
                 </li>
               ))}
             </ul>

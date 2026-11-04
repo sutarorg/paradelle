@@ -49,6 +49,13 @@ for (const vp of VIEWPORTS) {
     });
     record(`${vp.label}px ${path} no horizontal overflow`, metrics.overX <= 1, `(overX=${metrics.overX})`);
     if (metrics.broken > 0) record(`${vp.label}px ${path} images`, false, `${metrics.broken} broken`);
+    if (path.startsWith("/product/")) {
+      for (const label of ["Razorpay secure", "Insulated delivery", "48-hr melt promise"]) {
+        record(`${vp.label}px product trust badge visible: ${label}`, await page.getByText(label, { exact: true }).isVisible());
+      }
+      record(`${vp.label}px product has Add to bag CTA`, await page.getByRole("button", { name: "Add to bag" }).first().isVisible());
+      record(`${vp.label}px product has Order Now CTA`, await page.getByRole("button", { name: "Order Now" }).first().isVisible());
+    }
   }
   if (consoleErrors.length) record(`${vp.label}px console clean`, false, consoleErrors.slice(0, 2).join(" | "));
   else record(`${vp.label}px console clean over ${PAGES.length} pages`, true);
@@ -60,16 +67,14 @@ console.log("\n■ E2E purchase flow @390px");
 {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
   const page = await ctx.newPage();
-  await page.goto(BASE + "/product/pistachio-filled", { waitUntil: "networkidle" });
+  await page.goto(BASE + "/product/signature-milk", { waitUntil: "networkidle" });
 
-  // qty stepper to 2
-  await page.getByRole("button", { name: "Increase quantity" }).first().click();
-  await page.getByRole("button", { name: /Add to bag/ }).first().click();
+  await page.getByRole("button", { name: "Add to bag" }).first().click();
   await page.waitForTimeout(600);
   await page.goto(BASE + "/cart", { waitUntil: "networkidle" });
   const cartText = await page.textContent("body");
-  record("cart shows 2 items after stepper+add", /Qty|2/.test(cartText ?? "") && (cartText?.includes("Pistachio") ?? false));
-  record("free-shipping progress present", (cartText ?? "").includes("complimentary shipping") || (cartText ?? "").includes("Complimentary"));
+  record("cart shows the added Signature Milk bar", (cartText ?? "").includes("Signature Milk"));
+  record("cart shows ₹49 remaining for ₹499 free shipping", (cartText ?? "").includes("Add ₹49 more for FREE shipping"));
 
   await page.goto(BASE + "/checkout", { waitUntil: "networkidle" });
   const checkoutText = await page.textContent("body");
@@ -82,13 +87,15 @@ console.log("\n■ E2E purchase flow @390px");
 }
 
 // ——— Admin login via the real form ———
-console.log("\n■ Admin login + dashboard @1366px");
-{
+const adminTestEmail = process.env.ADMIN_TEST_EMAIL;
+const adminTestPassword = process.env.ADMIN_TEST_PASSWORD;
+if (adminTestEmail && adminTestPassword) {
+  console.log("\n■ Admin login + dashboard @1366px");
   const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 } });
   const page = await ctx.newPage();
   await page.goto(BASE + "/admin/login", { waitUntil: "networkidle" });
-  await page.fill('input[name="email"]', "admin@paradelle.store");
-  await page.fill('input[name="password"]', "Iskcon@098");
+  await page.fill('input[name="email"]', adminTestEmail);
+  await page.fill('input[name="password"]', adminTestPassword);
   await page.getByRole("button", { name: /Enter the atelier/ }).click();
   await page.waitForURL((url) => url.pathname === "/admin", { timeout: 15000 });
   await page.waitForLoadState("networkidle");
@@ -102,6 +109,8 @@ console.log("\n■ Admin login + dashboard @1366px");
   const prod = await page.textContent("body");
   record("products table lists four bars with SKUs", ["Signature Milk Chocolate", "Signature Dark Chocolate", "Crunchy Nut Chocolate", "Pistachio Filled Chocolate"].every((n) => (prod ?? "").includes(n)) && (prod ?? "").includes("PDL-"));
   await ctx.close();
+} else {
+  console.log("\n■ Admin login checks skipped (set ADMIN_TEST_EMAIL and ADMIN_TEST_PASSWORD in the test environment)");
 }
 
 // ——— Web vitals snapshot (home + PDP) ———

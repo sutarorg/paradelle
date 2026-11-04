@@ -228,10 +228,6 @@ export function CheckoutForm({ user, catalog, shipping, addresses = [] }: Props)
             All payments are prepaid and processed by Razorpay over encrypted connections; PARADELLE never sees your
             card or UPI credentials. We do not offer Cash on Delivery — prepaid orders keep the chilled chain reliable.
           </p>
-          <p className="mt-3 rounded-xl bg-cream px-4 py-3 text-[12.5px] leading-relaxed text-espresso/60">
-            <span className="font-semibold text-bronze">Launch note:</span> live payment capture activates with our public
-            launch (Phase 3). Placing your order today reserves it and emails you a secure payment link first.
-          </p>
         </section>
 
         {error ? (

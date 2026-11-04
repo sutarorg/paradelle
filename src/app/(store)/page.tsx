@@ -288,7 +288,7 @@ export default async function HomePage() {
               <div className="relative aspect-square overflow-hidden rounded-[2rem] ring-1 ring-espresso/10">
                 <Image
                   src="/images/gifting.webp"
-                  alt="PARADELLE gift box in ivory with a champagne-gold ribbon and four wrapped chocolate bars"
+                  alt="Open PARADELLE chocolate gift box with four wrapped bars and a gold ribbon"
                   fill
                   sizes="(max-width: 1024px) 100vw, 44vw"
                   className="object-cover"

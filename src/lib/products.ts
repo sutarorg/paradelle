@@ -26,7 +26,7 @@ export type Product = {
   nutritionPer100g: { energy: string; protein: string; carbs: string; sugars: string; fat: string; satFat: string; sodium: string };
   storage: string;
   shippingNote: string;
-  images: { front: string; angle: string };
+  images: { front: string; angle: string; gallery: string[] };
   accent: string; // hex accent used for chips/details
 };
 
@@ -34,7 +34,7 @@ const STORAGE =
   "Store in a cool, dry place at 16–20°C, away from direct sunlight and strong odours. Do not refrigerate unless ambient temperatures exceed 24°C; if refrigerated, seal airtight and allow the bar to return to room temperature before opening. Best enjoyed within 12 months of production.";
 
 const SHIPPING =
-  "Dispatched from our atelier within 1–2 business days in temperature-protective, insulated packaging (cool packs added automatically in warm months at no extra cost). Typical transit: 2–4 business days to metros and 3–7 business days elsewhere in India. Complimentary shipping on orders of ₹1,500 or more; a flat ₹99 otherwise.";
+  "Dispatched from our atelier within 1–2 business days in temperature-protective, insulated packaging (cool packs added automatically in warm months at no extra cost). Typical transit: 2–4 business days to metros and 3–7 business days elsewhere in India. Complimentary shipping on orders of ₹499 or more; a flat ₹99 otherwise.";
 
 export const PRODUCTS: Product[] = [
   {
@@ -56,7 +56,16 @@ export const PRODUCTS: Product[] = [
     nutritionPer100g: { energy: "555 kcal", protein: "7.5 g", carbs: "50 g", sugars: "47 g", fat: "35 g", satFat: "21 g", sodium: "0.18 g" },
     storage: STORAGE,
     shippingNote: SHIPPING,
-    images: { front: "/images/products/signature-milk-1.webp", angle: "/images/products/signature-milk-2.webp" },
+    images: {
+      front: "/images/products/signature-milk-1.webp",
+      angle: "/images/products/signature-milk-2.webp",
+      gallery: [
+        "/images/products/signature-milk-1.webp",
+        "/images/products/signature-milk-2.webp",
+        "/images/products/signature-milk-3.webp",
+        "/images/products/signature-milk-4.webp",
+      ],
+    },
     accent: "#C9A66B",
   },
   {
@@ -78,7 +87,16 @@ export const PRODUCTS: Product[] = [
     nutritionPer100g: { energy: "585 kcal", protein: "9.0 g", carbs: "30 g", sugars: "26 g", fat: "43 g", satFat: "26 g", sodium: "0.02 g" },
     storage: STORAGE,
     shippingNote: SHIPPING,
-    images: { front: "/images/products/signature-dark-1.webp", angle: "/images/products/signature-dark-2.webp" },
+    images: {
+      front: "/images/products/signature-dark-1.webp",
+      angle: "/images/products/signature-dark-2.webp",
+      gallery: [
+        "/images/products/signature-dark-1.webp",
+        "/images/products/signature-dark-2.webp",
+        "/images/products/signature-dark-3.webp",
+        "/images/products/signature-dark-4.webp",
+      ],
+    },
     accent: "#38202C",
   },
   {
@@ -99,7 +117,16 @@ export const PRODUCTS: Product[] = [
     nutritionPer100g: { energy: "560 kcal", protein: "9.0 g", carbs: "47 g", sugars: "44 g", fat: "36 g", satFat: "19 g", sodium: "0.16 g" },
     storage: STORAGE,
     shippingNote: SHIPPING,
-    images: { front: "/images/products/crunchy-nut-1.webp", angle: "/images/products/crunchy-nut-2.webp" },
+    images: {
+      front: "/images/products/crunchy-nut-1.webp",
+      angle: "/images/products/crunchy-nut-2.webp",
+      gallery: [
+        "/images/products/crunchy-nut-1.webp",
+        "/images/products/crunchy-nut-2.webp",
+        "/images/products/crunchy-nut-3.webp",
+        "/images/products/crunchy-nut-4.webp",
+      ],
+    },
     accent: "#795038",
   },
   {
@@ -120,7 +147,16 @@ export const PRODUCTS: Product[] = [
     nutritionPer100g: { energy: "548 kcal", protein: "8.6 g", carbs: "46 g", sugars: "42 g", fat: "35 g", satFat: "17 g", sodium: "0.14 g" },
     storage: STORAGE,
     shippingNote: SHIPPING,
-    images: { front: "/images/products/pistachio-filled-1.webp", angle: "/images/products/pistachio-filled-2.webp" },
+    images: {
+      front: "/images/products/pistachio-filled-1.webp",
+      angle: "/images/products/pistachio-filled-2.webp",
+      gallery: [
+        "/images/products/pistachio-filled-1.webp",
+        "/images/products/pistachio-filled-2.webp",
+        "/images/products/pistachio-filled-3.webp",
+        "/images/products/pistachio-filled-4.webp",
+      ],
+    },
     accent: "#5B6238",
   },
 ];

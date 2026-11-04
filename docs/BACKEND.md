@@ -36,7 +36,7 @@ Next.js App Router  ──►  src/app/api/* route handlers  ──►  PostgreS
 | `refunds` | refund lifecycle | requested → processed/rejected |
 | `razorpay_webhook_events` | event log + idempotency | unique `event_key` |
 | `coupon_redemptions` | one redemption per order | unique(order,coupon) |
-| `shipping_rules` | admin-editable charges | default ₹99 / free ≥ ₹1,500 (paise) |
+| `shipping_rules` | admin-editable charges | default ₹99 / free ≥ ₹499 (paise) |
 | (Phase 1–2) users, sessions, admins, admin_sessions, activity_logs, products, product_images, stock_movements, orders, order_items, coupons, settings, site_content, pincodes, newsletter_subscribers, contact_messages | | indexed; products have `CHECK (mrp ≥ price, stock ≥ 0)` |
 
 New food-label columns on `products`: `fssai_license`, `manufacturer`, `net_quantity_label`, `country_of_origin`, `best_before_months` — **left blank until pack copy is final; never fabricated.**
@@ -88,7 +88,7 @@ Fulfillment gate: only orders whose money came through a `verified` captured pay
 
 ## 7. Notifications
 
-`src/lib/email.ts` — templates: reservation, payment confirmation, shipment (tracking), refund. Provider: Resend (`RESEND_API_KEY` / `RESEND_FROM`); absent keys → server-logged queue entry (never throws into a payment path).
+`src/lib/email.ts` — templates: reservation, payment confirmation, shipment (tracking), refund, contact-form notification, and a cumulative newsletter-subscriber list sent to `CONTACT_NOTIFICATION_EMAIL`. Provider: Resend (`RESEND_API_KEY` / `RESEND_FROM`); inbound notifications additionally require `ENABLE_INBOUND_EMAIL_NOTIFICATIONS=true`. Contact/newsletter endpoints report delivery failures instead of claiming a notification was sent.
 
 ## 8. Deployment (GitHub → Vercel + Supabase)
 
@@ -96,8 +96,9 @@ Fulfillment gate: only orders whose money came through a `verified` captured pay
 # 1. Supabase: create project → get pooled connection string
 # 2. Apply schema
 psql "$DATABASE_URL" -f supabase/migrations/20260104_phase3_backend.sql
-npx tsx scripts/seed.ts
-node scripts/upload-media.ts   # uploads 8 mockups to Storage bucket product-media
+ADMIN_EMAIL=admin@paradelle.store ADMIN_INITIAL_PASSWORD='<unique secure password>' npx tsx scripts/seed.ts
+psql "$DATABASE_URL" -f supabase/migrations/20261104_storefront_media_shipping.sql
+npx tsx scripts/upload-media.ts   # uploads 16 supplied photos to Storage bucket product-media
 # 3. Vercel: import repo, set envs from .env.example (test keys first!)
 # 4. Razorpay dashboard (TEST): webhook https://<domain>/api/webhooks/razorpay
 # 5. Smoke: place test order with success@razorpay → verify webhook flip → admin sees verified payment

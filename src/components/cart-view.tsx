@@ -67,12 +67,12 @@ export function CartView({ catalog, shipping }: { catalog: Product[]; shipping: 
             <>
               <p className="flex items-center gap-2.5 text-[13px] font-medium text-espresso">
                 <Truck className="h-4 w-4 text-bronze" strokeWidth={1.8} />
-                Add {formatINR(totals.amountToFreeShipping)} more for complimentary shipping
+                Add {formatINR(totals.amountToFreeShipping)} more for FREE shipping
               </p>
               <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-espresso/10">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-bronze to-gold transition-all duration-700"
-                  style={{ width: `${Math.min(100, (totals.subtotal / Math.max(1, shipping.freeThreshold)) * 100)}%` }}
+                  style={{ width: `${Math.min(100, ((totals.subtotal - totals.discount) / Math.max(1, shipping.freeThreshold)) * 100)}%` }}
                 />
               </div>
             </>

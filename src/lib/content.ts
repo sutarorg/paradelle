@@ -7,7 +7,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How much does shipping cost?",
-    a: "A flat fee of ₹99 applies to orders below ₹1,500. Orders of ₹1,500 and above ship free. The exact amount is always shown on the cart page and again at checkout before you pay — there are no additional charges at delivery.",
+    a: "A flat fee of ₹99 applies to orders below ₹499. Orders of ₹499 and above ship free. The exact amount is always shown on the cart page and again at checkout before you pay — there are no additional charges at delivery.",
   },
   {
     q: "Will my chocolate melt in transit?",
@@ -63,7 +63,7 @@ export const POLICIES: Record<
       {
         heading: "Charges & free shipping",
         body: [
-          "A flat shipping fee of ₹99 applies to orders below ₹1,500. Orders of ₹1,500 or more ship free, anywhere we deliver in India. The exact shipping charge is always displayed on the cart page and re-confirmed at checkout — before you pay. There are no handling surcharges, and nothing additional is collected at delivery.",
+          "A flat shipping fee of ₹99 applies to orders below ₹499. Orders of ₹499 or more ship free, anywhere we deliver in India. The exact shipping charge is always displayed on the cart page and re-confirmed at checkout — before you pay. There are no handling surcharges, and nothing additional is collected at delivery.",
         ],
       },
       {

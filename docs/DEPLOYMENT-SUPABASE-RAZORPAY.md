@@ -23,12 +23,13 @@ Put this in Vercel as `DATABASE_URL`. (Drizzle/`pg` Pool works with Supabase poo
 1. **Supabase → SQL Editor → New query** and paste the full contents of `supabase/migrations/20260104_phase3_backend.sql` → **Run**.
    - It creates **all 26 tables** from scratch, adds constraints + indexes, seeds the shipping rule and enables **RLS policies** automatically (Supabase has the `auth` schema, so that block activates).
    - It is idempotent — re-running is safe, and against an older database it also converts legacy integer rupees to paise.
-2. Seed reference data (products + images, coupons, settings, super admin):
+2. Seed reference data (products + images, coupons, settings, and the initial Super Admin if configured):
 ```bash
-DATABASE_URL="<direct string, port 5432>" npx tsx scripts/seed.ts
+DATABASE_URL="<direct string, port 5432>" ADMIN_EMAIL="admin@paradelle.store" ADMIN_INITIAL_PASSWORD="<unique secure password>" npx tsx scripts/seed.ts
 ```
-3. *(Optional)* `DATABASE_URL="<direct>" npx drizzle-kit push` afterwards reconciles any microscopic drift against the Drizzle schema — safe either way.
-
+The password is read only from the secure environment; existing admin passwords are never overwritten by the seed.
+3. Apply `supabase/migrations/20261104_storefront_media_shipping.sql` in the SQL Editor. It replaces all four product galleries with the supplied image sequence and updates shipping rules/copy to free delivery at ₹499.
+4. *(Optional)* `DATABASE_URL="<direct>" npx drizzle-kit push` afterwards reconciles any microscopic drift against the Drizzle schema — safe either way.
 Verify: **Table Editor → `products` has 4 rows**; **Authentication → Policies** lists e.g. "customers read own orders", "public reads active products".
 
 ### A4. Media storage (16 product photos + hero + gifting)
@@ -37,8 +38,17 @@ Verify: **Table Editor → `products` has 4 rows**; **Authentication → Policie
 3. Run: `npx tsx scripts/upload-media.ts` — creates the bucket if missing, uploads all files, and **rewrites `product_images.url` to CDN URLs** (positions/alts preserved).
 4. Verify: open one URL in a browser; storefront images still render (they now come from Supabase CDN).
 
-### A5. Set the seeded admin password
-Sign in at `/admin/login` with `admin@paradelle.store / Iskcon@098` → **Settings → change password immediately**.
+### A5. Bootstrap or recover admin access
+The first seed creates the Super Admin only when `ADMIN_INITIAL_PASSWORD` is set and no matching admin already exists. Existing accounts are deliberately left untouched.
+
+To reset a known account, set `ADMIN_RESET_EMAIL` and a new `ADMIN_RESET_PASSWORD` only in a secure shell/deployment environment, then run:
+```bash
+npm run admin:reset-password
+```
+The reset invalidates existing admin sessions. Never commit, log, or paste passwords into source control or chat; use a unique password and remove the one-time environment value after the reset.
+
+### A6. Contact and newsletter notifications
+Set `CONTACT_NOTIFICATION_EMAIL=tejassutar.business@gmail.com`, `ENABLE_INBOUND_EMAIL_NOTIFICATIONS=true`, a valid `RESEND_API_KEY`, and a domain-verified `RESEND_FROM` in the deployment environment. Contact submissions are emailed to the owner inbox with the visitor as reply-to. Each newsletter submission sends the current ordered subscriber list to that inbox; addresses remain private from the public response. Without a working Resend configuration the API reports the delivery problem instead of claiming an email was sent.
 
 ---
 
@@ -58,7 +68,11 @@ RAZORPAY_WEBHOOK_SECRET=whsec_<generated>     # create a random 24+ char string
 DATABASE_URL=<supabase pooler string>
 SUPABASE_URL=… SUPABASE_SERVICE_ROLE_KEY=…
 NEXT_PUBLIC_SITE_URL=https://paradelle.store
-RESEND_API_KEY=…  RESEND_FROM="PARADELLE <orders@paradelle.store>"   # optional but recommended
+CONTACT_NOTIFICATION_EMAIL=tejassutar.business@gmail.com
+ENABLE_INBOUND_EMAIL_NOTIFICATIONS=true
+RESEND_API_KEY=…  RESEND_FROM="PARADELLE <orders@paradelle.store>"   # verified Resend sender required for contact/newsletter mail
+# Admin reset only, set transiently in a secure shell then remove:
+ADMIN_RESET_EMAIL=admin@paradelle.store  ADMIN_RESET_PASSWORD=<unique new password>
 ```
 
 ### B3. Configure the webhook (TEST mode dashboard)
