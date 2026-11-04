@@ -43,7 +43,7 @@ function template(event: OrderEmailEvent, order: OrderRow, extra?: { trackingUrl
 export async function sendOrderEmail(event: OrderEmailEvent, order: OrderRow, extra?: { trackingUrl?: string; amount?: number }) {
   const { subject, text } = template(event, order, extra);
   const key = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM ?? `${BRAND} <orders@paradelle.in>`;
+  const from = process.env.RESEND_FROM ?? `${BRAND} <orders@paradelle.store>`;
   if (!key) {
     console.log(`[email:queued-local] ${event} → ${order.email} :: ${subject}`);
     return { sent: false };

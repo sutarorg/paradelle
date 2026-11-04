@@ -71,7 +71,7 @@ async function main() {
     ["shipping.flat_fee", "9900"],
     ["shipping.free_threshold", "150000"],
     ["store.legal_name", "PARADELLE CHOCOLATES"],
-    ["store.support_email", "hello@paradelle.in"],
+    ["store.support_email", "hello@paradelle.store"],
   ] as const) {
     const existing = await db.select().from(settings).where(eq(settings.key, key)).limit(1);
     if (existing.length === 0) {

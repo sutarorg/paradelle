@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { getCatalog } from "@/lib/catalog";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://paradelle.in";
+  const base = SITE_URL;
   const catalog = await getCatalog().catch(() => []);
   const staticPages = ["", "/collection", "/our-story", "/craftsmanship", "/contact", "/faqs", "/legal/shipping", "/legal/refunds", "/legal/privacy", "/legal/terms", "/login", "/register"];
   return [

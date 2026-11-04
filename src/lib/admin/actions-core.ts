@@ -101,7 +101,7 @@ export async function saveStoreSettingsAction(formData: FormData) {
   const supportEmail = asStr(formData.get("supportEmail"));
   const note = asStr(formData.get("legalName"));
   const err = await safe(async () => {
-    await upsertSetting("store.support_email", supportEmail || "hello@paradelle.in");
+    await upsertSetting("store.support_email", supportEmail || "hello@paradelle.store");
     await upsertSetting("store.legal_name", note || "PARADELLE CHOCOLATES");
     await logActivity(me, "settings.store", "settings", "store");
   });

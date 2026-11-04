@@ -57,13 +57,13 @@ NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
 RAZORPAY_WEBHOOK_SECRET=whsec_<generated>     # create a random 24+ char string
 DATABASE_URL=<supabase pooler string>
 SUPABASE_URL=… SUPABASE_SERVICE_ROLE_KEY=…
-NEXT_PUBLIC_SITE_URL=https://<your-domain>
-RESEND_API_KEY=…  RESEND_FROM="PARADELLE <orders@your-domain>"   # optional but recommended
+NEXT_PUBLIC_SITE_URL=https://paradelle.store
+RESEND_API_KEY=…  RESEND_FROM="PARADELLE <orders@paradelle.store>"   # optional but recommended
 ```
 
 ### B3. Configure the webhook (TEST mode dashboard)
 **Settings → Webhooks → Add New Webhook**:
-- URL: `https://<your-domain>/api/webhooks/razorpay`
+- URL: `https://paradelle.store/api/webhooks/razorpay`
 - Secret: the same `RAZORPAY_WEBHOOK_SECRET`
 - Events: `payment.captured`, `payment.failed`, `order.paid`, `refund.processed`
 - Save. (Set it up **separately in Live mode** later — test/live webhook configs are independent.)

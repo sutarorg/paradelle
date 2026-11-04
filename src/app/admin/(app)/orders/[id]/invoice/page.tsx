@@ -57,7 +57,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
           <div className="sm:text-right">
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-espresso/45">From</p>
             <p className="mt-2 font-medium text-espresso">PARADELLE CHOCOLATES</p>
-            <p className="mt-1 leading-relaxed text-espresso/60">The Atelier, Mumbai, India<br />hello@paradelle.in · paradelle.in</p>
+            <p className="mt-1 leading-relaxed text-espresso/60">The Atelier, Mumbai, India<br />hello@paradelle.store · paradelle.store</p>
           </div>
         </div>
 
@@ -91,7 +91,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ id: st
 
         <footer className="mt-10 border-t border-espresso/10 pt-6 text-[11.5px] leading-relaxed text-espresso/50">
           <p>All amounts are MRP in INR, inclusive of applicable taxes. Payment: Razorpay (prepaid only).</p>
-          <p className="mt-1">Chocolate is a perishable food product — see paradelle.in/legal/refunds for remedies. This is a system-generated invoice.</p>
+          <p className="mt-1">Chocolate is a perishable food product — see paradelle.store/legal/refunds for remedies. This is a system-generated invoice.</p>
           <p className="font-display mt-4 text-sm italic text-bronze">Crafted for true indulgence.</p>
         </footer>
       </div>

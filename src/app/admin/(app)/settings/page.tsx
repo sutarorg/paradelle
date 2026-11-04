@@ -31,7 +31,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           <h2 className="font-display flex items-center gap-2 text-lg text-espresso"><Store className="h-5 w-5 text-bronze" strokeWidth={1.7} /> Store identity</h2>
           <div className="mt-5 space-y-4">
             <AdminField label="Business name (invoices)"><input name="legalName" defaultValue={map["store.legal_name"] ?? "PARADELLE CHOCOLATES"} className={adminInput} /></AdminField>
-            <AdminField label="Support email (invoices &amp; replies)"><input name="supportEmail" type="email" defaultValue={map["store.support_email"] ?? "hello@paradelle.in"} className={adminInput} /></AdminField>
+            <AdminField label="Support email (invoices &amp; replies)"><input name="supportEmail" type="email" defaultValue={map["store.support_email"] ?? "hello@paradelle.store"} className={adminInput} /></AdminField>
             <PendingButton>Save identity</PendingButton>
           </div>
         </form>

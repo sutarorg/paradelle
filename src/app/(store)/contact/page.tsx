@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 };
 
 const CHANNELS = [
-  { icon: Mail, title: "hello@paradelle.in", text: "Orders, gifting and general notes — answered personally.", href: "mailto:hello@paradelle.in" },
-  { icon: Mail, title: "privacy@paradelle.in", text: "Data access, correction or deletion requests.", href: "mailto:privacy@paradelle.in" },
+  { icon: Mail, title: "hello@paradelle.store", text: "Orders, gifting and general notes — answered personally.", href: "mailto:hello@paradelle.store" },
+  { icon: Mail, title: "privacy@paradelle.store", text: "Data access, correction or deletion requests.", href: "mailto:privacy@paradelle.store" },
   { icon: MapPin, title: "The Atelier", text: "PARADELLE Atelier, Mumbai, India. Visits by appointment.", href: null },
   { icon: Clock3, title: "Response within 2 days", text: "Monday–Saturday, 10:00–18:00 IST.", href: null },
 ];

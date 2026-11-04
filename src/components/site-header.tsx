@@ -37,7 +37,7 @@ export function SiteHeader() {
   return (
     <>
       <div className="bg-espresso text-center text-[11px] font-medium uppercase tracking-[0.22em] text-gold/90">
-        <p className="mx-auto max-w-7xl px-4 py-2">Complimentary shipping on orders above ₹1,500 &middot; Small-batch, crafted weekly</p>
+        <p className="mx-auto max-w-7xl px-4 py-2">FREE DELIVERY above ₹1,500</p>
       </div>
 
       <header

@@ -7,6 +7,7 @@ import { Kicker, ButtonLink } from "@/components/ui";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { getCatalog } from "@/lib/catalog";
 import { getContent, HOMEPAGE_DEFAULTS } from "@/lib/cms";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +36,7 @@ const BENEFITS = [
 
 export default async function HomePage() {
   const [cms, catalog] = await Promise.all([getContent("homepage", HOMEPAGE_DEFAULTS), getCatalog()]);
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://paradelle.in";
+  const base = SITE_URL;
   return (
     <>
       <script
@@ -49,7 +50,7 @@ export default async function HomePage() {
               slogan: "Crafted for true indulgence.",
               url: base,
               logo: `${base}/images/logo.png`,
-              contactPoint: { "@type": "ContactPoint", email: "hello@paradelle.in", contactType: "customer service", areaServed: "IN" },
+              contactPoint: { "@type": "ContactPoint", email: "hello@paradelle.store", contactType: "customer service", areaServed: "IN" },
             },
             {
               "@context": "https://schema.org",
