@@ -71,6 +71,10 @@ export function dbToCatalogProduct(
     images: {
       front: imgs[0]?.url ?? fallback?.images.front ?? "/images/products/milk-front.webp",
       angle: imgs[1]?.url ?? imgs[0]?.url ?? fallback?.images.angle ?? "/images/products/milk-angle.webp",
+      gallery: imgs.length > 0 ? imgs.map((image) => image.url) : fallback?.images.gallery ?? [
+        fallback?.images.front ?? "/images/products/milk-front.webp",
+        fallback?.images.angle ?? "/images/products/milk-angle.webp",
+      ],
     },
   };
 }

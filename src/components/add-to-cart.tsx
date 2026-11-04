@@ -50,7 +50,7 @@ export function AddToCart({ product }: { product: Product }) {
             )}
           >
             {added ? <Check className="h-4 w-4" strokeWidth={2.4} /> : <ShoppingBag className="h-4 w-4" strokeWidth={1.7} />}
-            {added ? "In your bag" : `Add to bag — ${formatINR(product.price * qty)}`}
+            {added ? "In your bag" : "Add to bag"}
           </button>
         </div>
 
@@ -60,7 +60,7 @@ export function AddToCart({ product }: { product: Product }) {
           className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-espresso/25 px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-espresso transition-colors hover:border-gold hover:bg-gold/10"
         >
           <Zap className="h-4 w-4 text-bronze" strokeWidth={1.7} />
-          Buy it now — secure Razorpay checkout
+          Order Now
         </button>
       </div>
 

@@ -9,7 +9,7 @@ Mobile-first, conversion-considered, ethically persuasive. No dark patterns anyw
 
 | Phase | Scope | Status |
 |---|---|---|
-| **Phase 1** | Complete public website, 4-product catalogue, cart, checkout (reservation), accounts, order tracking, 8 AI-generated WebP product mockups, shared data models, docs | ✅ Complete |
+| **Phase 1** | Complete public website, 4-product catalogue, cart, checkout (reservation), accounts, order tracking, 16 owner-supplied WebP product photos, shared data models, docs | ✅ Complete |
 | **Phase 2 (this deliverable)** | Protected `/admin` dashboard: real KPIs + revenue chart, product CRUD with image upload/reorder, inventory with movements, order fulfilment + tracking + printable invoices + CSV exports, customers, coupons, shipping rules, PIN serviceability, CMS for homepage/story/FAQs/policies, reports, activity log, team roles — all on the same database | ✅ Complete |
 | **Phase 3 (this deliverable)** | Integer-paise money, new tables (profiles, addresses, carts, reservations, webhook events, redemptions, shipping rules), transactions + oversell guards, Supabase migration with indexes/constraints/RLS, Zod-validated APIs (products, cart, checkout, verify), full Razorpay lifecycle (server order creation, Standard Checkout, signature + amount re-verification, signed idempotent webhooks, refunds, payment history), email service interface, rate limiting, FSSAI fields, `/pay` retry page | ✅ Complete |
 | **Phase 4 (this deliverable)** | 148 automated checks (functional ×54, payments ×20, security ×12, UI/mobile ×62, all rerun to green), Playwright at 6 viewports, Lighthouse 12 audits (96–100 across pages), 10 bugs found→fixed→regression-tested, real product photography integrated (16 assets), release report | ✅ Complete |
@@ -20,7 +20,7 @@ See **`docs/BACKEND.md`** for the database/API/payment/security/deployment contr
 
 ## Phase 2 — `/admin`
 
-**Access:** seeded Super Admin `admin@paradelle.store` / `Iskcon@098` (change after first sign-in — Settings). No public admin registration; staff are invited by Super Admins with per-section permissions (`catalog, inventory, orders, customers, marketing, content, reports, staff, settings`). Every admin page server-checks the session via `requireAdmin(permission)`; unpermitted areas never render in the sidebar and redirect if hit directly. All mutations write to `activity_logs`.
+**Access:** a Super Admin is created only when `ADMIN_INITIAL_PASSWORD` is provided in a secure environment and no account with `ADMIN_EMAIL` exists. Existing accounts can be recovered with the environment-based `admin:reset-password` script. Never commit or paste passwords into source control or chat. No public admin registration; staff are invited by Super Admins with per-section permissions (`catalog, inventory, orders, customers, marketing, content, reports, staff, settings`). Every admin page server-checks the session via `requireAdmin(permission)`; unpermitted areas never render in the sidebar and redirect if hit directly. All mutations write to `activity_logs`.
 
 **Dashboard:** revenue (paid orders only), paid/pending counts, unique customers, AOV, daily revenue SVG chart, best sellers, low-stock alerts (on-hand − reserved by unpaid orders), recent orders — with 7/30/90/all-time windows. No statistic is fabricated; empty states are honest.
 
@@ -34,7 +34,7 @@ See **`docs/BACKEND.md`** for the database/API/payment/security/deployment contr
 
 Checkout.js client, signature + amount verification, signed idempotent webhooks (`/api/webhooks/razorpay`), gateway-executed refunds, transactional email templates, carts API, addresses, reservations. Full contract in **`docs/BACKEND.md`**. Remaining for Phase 4: independent QA, Upstash rate-limit swap, Supabase Auth bridge (optional — current sessions are hardened), live-mode rehearsal.
 
-Run seeds after `drizzle-kit push`: `npx tsx scripts/seed.ts` (idempotent).
+Run seeds after `drizzle-kit push`: set `ADMIN_EMAIL` and a unique `ADMIN_INITIAL_PASSWORD` in your secure environment, then run `npx tsx scripts/seed.ts` (idempotent; an existing admin password is never overwritten). To recover an existing account, set `ADMIN_RESET_EMAIL` and a new `ADMIN_RESET_PASSWORD`, then run `npm run admin:reset-password`; the reset invalidates existing admin sessions.
 
 ---
 
@@ -67,6 +67,11 @@ Copy `.env.example`. Keys:
 | `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Phase 3 — Checkout.js client |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Phase 2 — media storage + admin |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata (production: `https://paradelle.store`) |
+| `ADMIN_EMAIL` / `ADMIN_INITIAL_PASSWORD` | Secure one-time initial Super Admin bootstrap |
+| `ADMIN_RESET_EMAIL` / `ADMIN_RESET_PASSWORD` | Secure one-time password reset; never store actual values in Git |
+| `RESEND_API_KEY` / `RESEND_FROM` | Resend credentials and verified sender for contact/newsletter notifications |
+| `CONTACT_NOTIFICATION_EMAIL` | Owner inbox for contact messages and cumulative newsletter list |
+| `ENABLE_INBOUND_EMAIL_NOTIFICATIONS` | Explicitly enable owner email notifications after Resend is configured |
 
 ---
 
@@ -104,20 +109,20 @@ src/
 
 ## Commerce rules (single source: `src/lib/commerce.ts`)
 
-- Flat shipping **₹99**, **free ≥ ₹1,500** — shown on cart page, checkout and every product page *before* payment (shipping-cost surprise is the #1 abandonment cause).
+- Flat shipping **₹99**, **free ≥ ₹499** — shown on cart page, checkout and every product page *before* payment (shipping-cost surprise is the #1 abandonment cause).
 - Prices are **prestige round numbers** (₹450 / ₹550 / ₹500 / ₹700), MRP inclusive of taxes — luxury price-ladder anchoring (Dark anchors Milk; Pistachio anchors the house).
 
 ## Media assets (Phase 2 → Supabase Storage)
 
-Generated in Phase 1 as WebP, all 1:1, ready to upload to a Supabase bucket named `product-media`:
+Compressed as 1:1 WebP and ready to upload to a Supabase bucket named `product-media`:
 
 ```
-public/images/products/{milk,dark,nut,pistachio}-{front,angle}.webp   ← 8 product mockups
+public/images/products/{signature-milk,signature-dark,crunchy-nut,pistachio-filled}-{1,2,3,4}.webp   ← 16 supplied product photos
 public/images/hero.webp  gifting.webp                                  ← editorial
 public/images/logo.png                                                 ← official crest (unmodified)
 ```
 
-Wrapper references were used as generation direction only; the eight shipping assets are original AI mockups. Front = sealed wrapper packshot; angle = three-quarter composition with chocolate. To move to Supabase: upload the folder, then prefix `images.*` paths in `src/lib/products.ts` with the public bucket URL.
+The four supplied Drive photos for each product are stored in the requested order as compressed WebP. The database migration `supabase/migrations/20261104_storefront_media_shipping.sql` replaces existing product image rows and sets the ₹499 free-shipping threshold. To use Supabase Storage, run `npx tsx scripts/upload-media.ts` after the migration.
 
 > ⚠️ **Confirm before launch:** ingredient decks, cocoa percentages, allergen statements and nutrition values in `src/lib/products.ts` are realistic industry-typical placeholders. Replace with laboratory/production specifications. Contact emails (`hello@`, `privacy@paradelle.store`) and the atelier city are configurable brand constants.
 

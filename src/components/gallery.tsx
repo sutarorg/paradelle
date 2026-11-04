@@ -11,10 +11,10 @@ export function Gallery({ product }: { product: Product & { imageList?: { id: st
   const slides =
     product.imageList && product.imageList.length > 0
       ? [...product.imageList].sort((a, b) => a.position - b.position).map((i) => ({ src: i.url, label: i.alt }))
-      : [
-          { src: product.images.front, label: "sealed front wrapper" },
-          { src: product.images.angle, label: "three-quarter product view" },
-        ];
+      : (product.images.gallery ?? [product.images.front, product.images.angle]).map((src, i) => ({
+          src,
+          label: `product view ${i + 1}`,
+        }));
 
   return (
     <div>

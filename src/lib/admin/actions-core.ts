@@ -29,19 +29,26 @@ export async function adminLoginAction(_prev: AdminAuthState, formData: FormData
   const password = asStr(formData.get("password"));
   if (!email || !password) return { error: "Enter your email and password." };
 
-  const rows = await db.select().from(admins).where(eq(admins.email, email)).limit(1);
-  const admin = rows[0];
-  if (!admin || !admin.active || !(await verifyPassword(password, admin.passwordHash))) {
-    return { error: "Invalid credentials, or this account is disabled." };
+  try {
+    const rows = await db.select().from(admins).where(eq(admins.email, email)).limit(1);
+    const admin = rows[0];
+    if (!admin || !admin.active || !(await verifyPassword(password, admin.passwordHash))) {
+      return { error: "Invalid credentials, or this account is disabled." };
+    }
+    await createAdminSession(admin.id);
+    await db.update(admins).set({ lastLoginAt: new Date() }).where(eq(admins.id, admin.id)).catch((err) => {
+      console.error("admin:last-login", err instanceof Error ? err.message : "update failed");
+    });
+    await logActivity(
+      { id: admin.id, email: admin.email, name: admin.name, role: admin.role === "super" ? "super" : "staff", permissions: admin.permissions },
+      "auth.login",
+      "admin",
+      admin.id,
+    );
+  } catch (err) {
+    console.error("admin:login", err instanceof Error ? err.message : "authentication failed");
+    return { error: "Sign-in is temporarily unavailable. Please try again or contact the administrator." };
   }
-  await createAdminSession(admin.id);
-  await db.update(admins).set({ lastLoginAt: new Date() }).where(eq(admins.id, admin.id));
-  await logActivity(
-    { id: admin.id, email: admin.email, name: admin.name, role: admin.role === "super" ? "super" : "staff", permissions: admin.permissions },
-    "auth.login",
-    "admin",
-    admin.id,
-  );
   redirect("/admin");
 }
 
@@ -80,7 +87,7 @@ export async function saveShippingAction(formData: FormData) {
   const me = await requireAdmin("settings");
   // Admin enters rupees; storage is integer paise.
   const flatFee = Math.max(0, asInt(formData.get("flatFee"), 99)) * 100;
-  const freeThreshold = Math.max(0, asInt(formData.get("freeThreshold"), 1500)) * 100;
+  const freeThreshold = Math.max(0, asInt(formData.get("freeThreshold"), 499)) * 100;
   const err = await safe(async () => {
     await upsertSetting("shipping.flat_fee", String(flatFee));
     await upsertSetting("shipping.free_threshold", String(freeThreshold));

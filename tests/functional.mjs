@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /** Phase 4 — functional battery. Node 20+ fetch against the live server. */
 const BASE = process.env.BASE_URL || "http://127.0.0.1:3000";
+const notificationDeliveryEnabled = process.env.ENABLE_INBOUND_EMAIL_NOTIFICATIONS === "true" && Boolean(process.env.RESEND_API_KEY);
 
 let pass = 0, fail = 0;
 const failures = [];
@@ -81,17 +82,21 @@ console.log("\n■ Public API behaviour");
   r = await post("/api/newsletter", { email: "nope" });
   record("newsletter rejects bad email", r.status === 400, `(${r.status})`);
 
-  r = await post("/api/newsletter", { email: "phase4@test.in" });
-  record("newsletter accepts valid email", r.status === 200, `(${r.status})`);
+  if (!notificationDeliveryEnabled) {
+    r = await post("/api/newsletter", { email: "phase4@test.in" });
+    record("newsletter saves a valid address and reports disabled email delivery", r.status === 503 && r.text.includes("saved"), `(${r.status})`);
 
-  r = await post("/api/newsletter", { email: "phase4@test.in" });
-  record("newsletter duplicate is graceful", r.status === 200, `(${r.status})`);
+    r = await post("/api/newsletter", { email: "phase4@test.in" });
+    record("newsletter duplicate retries the owner-list notification", r.status === 503 && r.text.includes("saved"), `(${r.status})`);
+
+    r = await post("/api/contact", { name: "QA Tester", email: "qa@test.in", message: "<script>alert(1)</script> — is this stored safely?" });
+    record("contact message is stored and reports disabled email delivery", r.status === 503 && r.text.includes("saved"), `(${r.status})`);
+  } else {
+    record("live inbound email checks skipped to avoid sending test messages", true);
+  }
 
   r = await post("/api/contact", { name: "T", email: "t@t.in", message: "short" });
   record("contact enforces message length", r.status === 400, `(${r.status})`);
-
-  r = await post("/api/contact", { name: "QA Tester", email: "qa@test.in", message: "<script>alert(1)</script> — is this stored safely?" });
-  record("contact accepts (and stores) a would-be XSS probe for later render check", r.status === 200, `(${r.status})`);
 
   r = await get("/api/cart");
   record("cart answers anonymously (no console 401)", r.status === 200 && JSON.parse(r.text).anonymous === true, `(${r.status})`);

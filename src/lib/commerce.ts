@@ -6,8 +6,8 @@ import { PRODUCTS, getProduct, type Product } from "./products";
  * Phase 2: catalogue, coupon rules and shipping charges can be overridden by the
  * database (admin-managed); the constants below are the offline defaults.
  */
-/** All money values are INTEGER PAISE (₹1,500 → 150000). */
-export const FREE_SHIPPING_THRESHOLD = 150000;
+/** All money values are INTEGER PAISE (₹499 → 49900). */
+export const FREE_SHIPPING_THRESHOLD = 49900;
 export const FLAT_SHIPPING_FEE = 9900;
 
 export type Coupon = {

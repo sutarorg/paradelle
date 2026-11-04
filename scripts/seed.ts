@@ -6,9 +6,9 @@ import { PRODUCTS } from "../src/lib/products";
 import { hashPassword } from "../src/lib/password";
 
 /**
- * Phase 1→2 seed: the four signature products (with their generated mockups),
- * default coupons, shipping settings and the initial Super Admin.
- * Idempotent — re-running never overwrites admin edits (onConflict do nothing).
+ * Phase 1→2 seed: the four signature products (with their supplied photo galleries),
+ * default coupons, shipping settings and an optional initial Super Admin.
+ * Idempotent — re-running never overwrites existing admin credentials.
  */
 async function main() {
   // Products
@@ -47,11 +47,15 @@ async function main() {
         sort: i,
       })
       .returning({ id: products.id });
-    await db.insert(productImages).values([
-      { productId: inserted[0].id, url: p.images.front, alt: `${p.name} — sealed wrapper`, position: 0 },
-      { productId: inserted[0].id, url: p.images.angle, alt: `${p.name} — three-quarter view`, position: 1 },
-    ]);
-    console.log(`+ seeded ${p.name} (60 bars, 2 mockups linked)`);
+    await db.insert(productImages).values(
+      p.images.gallery.map((url, position) => ({
+        productId: inserted[0].id,
+        url,
+        alt: `${p.name} — product photograph ${position + 1}`,
+        position,
+      })),
+    );
+    console.log(`+ seeded ${p.name} (60 bars, ${p.images.gallery.length} product photos linked)`);
   }
 
   // Coupons
@@ -69,7 +73,7 @@ async function main() {
   // Shipping settings (paise) + primary shipping rule row
   for (const [key, value] of [
     ["shipping.flat_fee", "9900"],
-    ["shipping.free_threshold", "150000"],
+    ["shipping.free_threshold", "49900"],
     ["store.legal_name", "PARADELLE CHOCOLATES"],
     ["store.support_email", "hello@paradelle.store"],
   ] as const) {
@@ -83,24 +87,31 @@ async function main() {
   // Primary shipping rule (paise)
   const ruleRows = await db.select().from(shippingRules).limit(1);
   if (ruleRows.length === 0) {
-    await db.insert(shippingRules).values({ name: "Standard (all India)", flatFeePaise: 9900, freeThresholdPaise: 150000, active: true });
+    await db.insert(shippingRules).values({ name: "Standard (all India)", flatFeePaise: 9900, freeThresholdPaise: 49900, active: true });
     console.log("+ shipping rule row");
   }
 
-  // Super Admin (default credentials from the brief — change after first sign-in)
-  const adminEmail = "admin@paradelle.store";
+  // Super Admin — credentials must be provided out-of-band; no default password is stored in source.
+  const adminEmail = (process.env.ADMIN_EMAIL ?? "admin@paradelle.store").trim().toLowerCase();
+  const initialAdminPassword = process.env.ADMIN_INITIAL_PASSWORD;
   const existingAdmin = await db.select({ id: admins.id }).from(admins).where(eq(admins.email, adminEmail)).limit(1);
   if (existingAdmin.length === 0) {
-    await db.insert(admins).values({
-      name: "House Admin",
-      email: adminEmail,
-      passwordHash: await hashPassword("Iskcon@098"),
-      role: "super",
-      permissions: [],
-    });
-    console.log("+ super admin admin@paradelle.store created");
+    if (!initialAdminPassword) {
+      console.warn("! Super Admin not created. Set ADMIN_INITIAL_PASSWORD securely and rerun the seed.");
+    } else if (initialAdminPassword.length < 12) {
+      throw new Error("ADMIN_INITIAL_PASSWORD must be at least 12 characters.");
+    } else {
+      await db.insert(admins).values({
+        name: "House Admin",
+        email: adminEmail,
+        passwordHash: await hashPassword(initialAdminPassword),
+        role: "super",
+        permissions: [],
+      });
+      console.log(`+ Super Admin created for ${adminEmail}`);
+    }
   } else {
-    console.log("· super admin exists (password unchanged)");
+    console.log(`· Super Admin ${adminEmail} exists (password unchanged)`);
   }
 
   console.log("Seed complete.");

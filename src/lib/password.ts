@@ -11,9 +11,13 @@ export async function hashPassword(password: string): Promise<string> {
 }
 
 export async function verifyPassword(password: string, stored: string): Promise<boolean> {
-  const [salt, hash] = stored.split(":");
-  if (!salt || !hash) return false;
-  const derived = await scryptAsync(password, salt, 64);
-  const expected = Buffer.from(hash, "hex");
-  return expected.length === derived.length && timingSafeEqual(derived, expected);
+  try {
+    const [salt, hash] = stored.split(":");
+    if (!salt || !hash || !/^[a-f0-9]+$/i.test(salt) || !/^[a-f0-9]{128}$/i.test(hash)) return false;
+    const derived = await scryptAsync(password, salt, 64);
+    const expected = Buffer.from(hash, "hex");
+    return expected.length === derived.length && timingSafeEqual(derived, expected);
+  } catch {
+    return false;
+  }
 }

@@ -36,7 +36,7 @@ export default async function ShippingPage({ searchParams }: { searchParams: Pro
         <div className="rounded-2xl border border-espresso/8 bg-cream/60 p-6 text-[13px] leading-relaxed text-espresso/65">
           <h3 className="font-display text-lg text-espresso">How customers see it</h3>
           <ul className="mt-3 list-none space-y-2.5">
-            <li>— Cart page progress bar: “Add ₹X more for complimentary shipping”.</li>
+            <li>— Cart page progress bar: “Add ₹X more for FREE shipping”.</li>
             <li>— Checkout summary shows {formatINR(cfg.flatFee)} flat, or “Complimentary” at {formatINR(cfg.freeThreshold)}+.</li>
             <li>— Nothing extra is collected at delivery. Ever.</li>
           </ul>

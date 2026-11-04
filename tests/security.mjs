@@ -50,7 +50,7 @@ console.log("\n■ Rate limiting");
 {
   let last = 0;
   for (let i = 0; i < 8; i++) {
-    const r = await req("/api/newsletter", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: `burst${i}@test.in` }) });
+    const r = await req("/api/newsletter", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: `invalid-${i}` }) });
     last = r.status;
   }
   record("newsletter flood is throttled (429 within 8 rapid posts)", last === 429, `(last=${last})`);

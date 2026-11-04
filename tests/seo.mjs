@@ -27,6 +27,12 @@ const EXPECTED_PRODUCT_PRICES = {
   "/product/crunchy-nut": 500,
   "/product/pistachio-filled": 700,
 };
+const EXPECTED_PRODUCT_GALLERIES = Object.fromEntries(
+  Object.keys(EXPECTED_PRODUCT_PRICES).map((path) => {
+    const slug = path.slice("/product/".length);
+    return [path, [1, 2, 3, 4].map((number) => `/images/products/${slug}-${number}.webp`)];
+  }),
+);
 
 let passed = 0;
 let failed = 0;
@@ -120,6 +126,11 @@ for (const path of URLS) {
     check(`${path} has a valid stock-derived Offer availability`, ["https://schema.org/InStock", "https://schema.org/OutOfStock"].includes(product?.offers?.availability));
     check(`${path} includes product description and no fabricated ratings`, Boolean(product?.description) && !product?.aggregateRating && !product?.review);
     check(`${path} includes BreadcrumbList JSON-LD`, structuredData.some((entry) => entry?.["@type"] === "BreadcrumbList"));
+    const gallerySources = imageTags.map((image) => {
+      try { return decodeURIComponent(image.src ?? ""); } catch { return image.src ?? ""; }
+    });
+    const galleryOrder = EXPECTED_PRODUCT_GALLERIES[path].map((asset) => gallerySources.findIndex((src) => src.includes(asset)));
+    check(`${path} uses the four supplied product images in order`, galleryOrder.every((index, i) => index >= 0 && (i === 0 || index > galleryOrder[i - 1])), JSON.stringify(galleryOrder));
   }
 }
 

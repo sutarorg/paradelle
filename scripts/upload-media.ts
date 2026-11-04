@@ -6,7 +6,7 @@ import { db } from "../src/db";
 import { productImages } from "../src/db/schema";
 
 /**
- * Phase 3 media pipeline — uploads the eight AI-generated 1:1 product mockups
+ * Media pipeline — uploads all 16 supplied 1:1 product photos
  * (plus editorial imagery) to Supabase Storage (bucket: product-media) and
  * rewrites product_images rows to the public CDN URLs, preserving position/alt.
  *

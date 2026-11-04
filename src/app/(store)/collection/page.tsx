@@ -29,7 +29,7 @@ export default async function CollectionPage() {
           </h1>
           <p className="mt-5 text-[15px] leading-relaxed text-espresso/65">
             A deliberately small collection — each bar perfected rather than multiplied. All prices are MRP,
-            inclusive of taxes; complimentary shipping on orders of ₹1,500 or more.
+            inclusive of taxes; complimentary shipping on orders of ₹499 or more.
           </p>
         </div>
       </Reveal>
