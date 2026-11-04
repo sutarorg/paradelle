@@ -74,6 +74,8 @@ Structured data: Organization + WebSite JSON-LD (home), Product JSON-LD with INR
 
 Env note: `.env` mutations are sandbox-local (snapshots may revert them); production secrets go in Vercel/Supabase dashboards — never the repo.
 
+| 11 | P1 | Migration failed on fresh Supabase: `relation "products" does not exist`; latent `CREATE POLICY IF NOT EXISTS` syntax | Migration assumed drizzle-pushed tables and used a non-existent PG clause | Rewrote `supabase/migrations/20260104_phase3_backend.sql` standalone: creates all 26 tables itself (`IF NOT EXISTS`), paise conversion guarded via `to_regclass`, policies guarded via `pg_policies`; validated clean on the existing DB AND a thrown-away fresh DB |
+
 ## Remaining known limits (documented, none blocking launch)
 
 - Lighthouse “PDP meta description” warning is a **verified false positive** (tag confirmed inside `<head>` at byte 3185 via raw HTML; all other pages clean).

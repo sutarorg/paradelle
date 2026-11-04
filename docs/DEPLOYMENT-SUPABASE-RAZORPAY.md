@@ -19,14 +19,17 @@ Put this in Vercel as `DATABASE_URL`. (Drizzle/`pg` Pool works with Supabase poo
 
 > For migrations below, use the **direct** string (port 5432) or the SQL editor.
 
-### A3. Apply the schema
+### A3. Apply the schema (one standalone SQL file — nothing else needed first)
+1. **Supabase → SQL Editor → New query** and paste the full contents of `supabase/migrations/20260104_phase3_backend.sql` → **Run**.
+   - It creates **all 26 tables** from scratch, adds constraints + indexes, seeds the shipping rule and enables **RLS policies** automatically (Supabase has the `auth` schema, so that block activates).
+   - It is idempotent — re-running is safe, and against an older database it also converts legacy integer rupees to paise.
+2. Seed reference data (products + images, coupons, settings, super admin):
 ```bash
-# locally, with the Supabase direct connection in env
-DATABASE_URL="<direct string>" npx drizzle-kit push          # tables
-psql "<direct string>" -f supabase/migrations/20260104_phase3_backend.sql   # paise guard, constraints, indexes, RLS
-DATABASE_URL="<direct string>" npx tsx scripts/seed.ts       # 4 products, 16 image rows, coupons, settings, super-admin
+DATABASE_URL="<direct string, port 5432>" npx tsx scripts/seed.ts
 ```
-RLS policies auto-activate because Supabase has the `auth` schema. Verify: **Table Editor → any table → RLS enabled** badge; **Authentication → Policies** lists e.g. "customers read own orders".
+3. *(Optional)* `DATABASE_URL="<direct>" npx drizzle-kit push` afterwards reconciles any microscopic drift against the Drizzle schema — safe either way.
+
+Verify: **Table Editor → `products` has 4 rows**; **Authentication → Policies** lists e.g. "customers read own orders", "public reads active products".
 
 ### A4. Media storage (16 product photos + hero + gifting)
 1. **Storage → New bucket** → name `product-media`, **Public: ON**.
