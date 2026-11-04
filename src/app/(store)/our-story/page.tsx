@@ -12,8 +12,19 @@ export const dynamic = "force-dynamic";
 
 export const metadata = pageMetadata({
   path: "/our-story",
-  title: "Our Story | PARADELLE CHOCOLATES",
-  description: "Why PARADELLE makes only four bars — and why each one takes its time.",
+  title: "Our Story | The Philosophy Behind Paradelle Chocolates",
+  description:
+    "Discover the inspiration, philosophy and brand identity behind Paradelle Chocolates and explore the story behind our premium chocolate collection.",
+  keywords: [
+    "Paradelle story",
+    "about Paradelle",
+    "luxury chocolate brand India",
+    "premium chocolate brand",
+    "chocolate brand philosophy",
+    "brand journey",
+    "chocolate craftsmanship",
+    "luxury chocolatier",
+  ],
   image: SOCIAL_IMAGE_BY_PAGE.story,
 });
 

@@ -7,8 +7,19 @@ import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
 export const metadata = pageMetadata({
   path: "/craftsmanship",
-  title: "Craftsmanship | PARADELLE CHOCOLATES",
-  description: "Roasting, conching, tempering and wrapping — the four rituals behind every PARADELLE bar.",
+  title: "Chocolate Craftsmanship & Quality | Paradelle Chocolates",
+  description:
+    "Explore Paradelle's approach to chocolate craftsmanship, product presentation and the details behind its four signature chocolate creations.",
+  keywords: [
+    "chocolate craftsmanship",
+    "premium chocolate making",
+    "chocolate quality",
+    "luxury chocolate craftsmanship",
+    "chocolate production",
+    "cocoa chocolate",
+    "gourmet chocolate",
+    "Paradelle chocolates",
+  ],
   image: SOCIAL_IMAGE_BY_PAGE.craftsmanship,
 });
 

@@ -7,10 +7,20 @@ import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   path: "/register",
-  title: "Create a PARADELLE Account | PARADELLE CHOCOLATES",
-  description: "Create an account to track chocolate orders, keep your history and check out faster.",
+  title: "Create Your Account | Paradelle Chocolates",
+  description:
+    "Create your Paradelle Chocolates account to manage your personal details, save delivery addresses, access your orders and enjoy a convenient shopping experience.",
+  keywords: [
+    "Paradelle registration",
+    "create account",
+    "chocolate store signup",
+    "customer registration India",
+    "shopping account",
+    "customer profile",
+    "online shopping",
+    "account creation",
+  ],
   image: SOCIAL_IMAGE_BY_PAGE.register,
-  noindex: true,
 });
 export const dynamic = "force-dynamic";
 

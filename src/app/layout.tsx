@@ -23,26 +23,45 @@ const dmSans = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  applicationName: "Paradelle Chocolates",
+  creator: "Paradelle Chocolates",
+  publisher: "Paradelle Chocolates",
   title: {
-    default: "PARADELLE CHOCOLATES — Crafted for True Indulgence",
-    template: "%s | PARADELLE CHOCOLATES",
+    default: "Premium Chocolates Online in India | Paradelle Chocolates",
+    template: "%s | Paradelle Chocolates",
   },
   description:
-    "Small-batch European-style chocolate bars — Signature Milk, Signature Dark, Crunchy Nut and Pistachio Filled. Temperature-protected delivery across India. Secure Razorpay checkout.",
+    "Explore Paradelle Chocolates, a premium chocolate brand featuring Signature Milk, Signature Dark, Crunchy Nut and Pistachio Filled chocolate bars.",
+  keywords: [
+    "Paradelle Chocolates",
+    "premium chocolates India",
+    "luxury chocolate brand",
+    "chocolate bars online India",
+    "premium chocolate bars",
+    "buy chocolate online",
+    "milk chocolate bar",
+    "dark chocolate bar",
+  ],
   alternates: { canonical: `${SITE_URL}/` },
-  icons: { icon: "/images/logo.png", apple: "/images/logo.png" },
+  icons: {
+    icon: { url: "/images/logo.png", type: "image/png", sizes: "500x500" },
+    shortcut: { url: "/images/logo.png", type: "image/png", sizes: "500x500" },
+    apple: { url: "/images/logo.png", type: "image/png", sizes: "500x500" },
+  },
   openGraph: {
-    title: "PARADELLE CHOCOLATES — Crafted for True Indulgence",
-    description: "Crafted for true indulgence. Four signature bars, small-batch made.",
+    title: "Premium Chocolates Online in India | Paradelle Chocolates",
+    description:
+      "Explore Paradelle Chocolates, a premium chocolate brand featuring Signature Milk, Signature Dark, Crunchy Nut and Pistachio Filled chocolate bars.",
     url: `${SITE_URL}/`,
-    siteName: "PARADELLE CHOCOLATES",
+    siteName: "Paradelle Chocolates",
     images: [{ url: "/images/hero.webp" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PARADELLE CHOCOLATES — Crafted for True Indulgence",
-    description: "Crafted for true indulgence. Four signature bars, small-batch made.",
+    title: "Premium Chocolates Online in India | Paradelle Chocolates",
+    description:
+      "Explore Paradelle Chocolates, a premium chocolate brand featuring Signature Milk, Signature Dark, Crunchy Nut and Pistachio Filled chocolate bars.",
     images: ["/images/hero.webp"],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },

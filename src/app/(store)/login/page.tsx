@@ -7,10 +7,20 @@ import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   path: "/login",
-  title: "Sign in to Your PARADELLE Account | PARADELLE CHOCOLATES",
-  description: "Sign in to track PARADELLE orders, review your account and check out faster.",
+  title: "Customer Login | Paradelle Chocolates",
+  description:
+    "Sign in to your Paradelle Chocolates account to manage your customer profile, access previous orders, review account details and track purchases.",
+  keywords: [
+    "Paradelle login",
+    "customer account",
+    "chocolate store login",
+    "customer sign in",
+    "shopping account India",
+    "order history",
+    "order tracking",
+    "account access",
+  ],
   image: SOCIAL_IMAGE_BY_PAGE.login,
-  noindex: true,
 });
 export const dynamic = "force-dynamic";
 

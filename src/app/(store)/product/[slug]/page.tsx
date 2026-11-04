@@ -11,7 +11,7 @@ import { Reveal } from "@/components/reveal";
 import { Kicker } from "@/components/ui";
 import { formatINR } from "@/lib/utils";
 import { SITE_URL } from "@/lib/site";
-import { pageMetadata, siteTitle } from "@/lib/seo";
+import { pageMetadata, PRODUCT_PAGE_SEO, siteTitle } from "@/lib/seo";
 import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
 export const dynamic = "force-dynamic";
@@ -20,10 +20,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getCatalogProduct(slug);
   if (!product) return { title: "Product not found" };
+  const requestedSeo = PRODUCT_PAGE_SEO[product.slug];
   return pageMetadata({
     path: `/product/${product.slug}`,
-    title: product.seoTitle || siteTitle(`${product.name} — ${formatINR(product.price)}`),
-    description: product.seoDescription || `${product.tagline} ${product.weightGrams} g bar · ${product.cocoaPercent}% cacao · MRP inclusive of taxes.`,
+    title: requestedSeo?.title ?? (product.seoTitle || siteTitle(`${product.name} — ${formatINR(product.price)}`)),
+    description:
+      requestedSeo?.description ??
+      (product.seoDescription || `${product.tagline} ${product.weightGrams} g bar · ${product.cocoaPercent}% cacao · MRP inclusive of taxes.`),
+    keywords: requestedSeo?.keywords,
     image: product.images.front,
   });
 }
@@ -221,7 +225,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             description: product.description,
             image: [new URL(product.images.front, `${SITE_URL}/`).toString()],
             sku: product.sku,
-            brand: { "@type": "Brand", name: "PARADELLE CHOCOLATES" },
+            brand: { "@type": "Brand", name: "Paradelle Chocolates" },
             weight: { "@type": "QuantitativeValue", value: product.weightGrams, unitCode: "GRM" },
             offers: {
               "@type": "Offer",
@@ -230,7 +234,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               price: product.price / 100,
               availability: availableStock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
               itemCondition: "https://schema.org/NewCondition",
-              seller: { "@type": "Organization", name: "PARADELLE CHOCOLATES" },
+              seller: { "@type": "Organization", name: "Paradelle Chocolates" },
             },
           }).replace(/</g, "\\u003c"),
         }}

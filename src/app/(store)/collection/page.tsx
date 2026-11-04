@@ -10,9 +10,19 @@ export const dynamic = "force-dynamic";
 
 export const metadata = pageMetadata({
   path: "/collection",
-  title: "The Collection — Four Signature Bars | PARADELLE CHOCOLATES",
+  title: "Shop Premium Chocolate Bars Online | Paradelle",
   description:
-    "Signature Milk, Signature Dark, Crunchy Nut and Pistachio Filled. Small-batch PARADELLE bars with transparent pricing and insulated delivery across India.",
+    "Discover all four Paradelle chocolate bars, from Signature Milk and Signature Dark to Crunchy Nut and Pistachio Filled, in one curated collection.",
+  keywords: [
+    "premium chocolate collection",
+    "chocolate bars online",
+    "buy premium chocolate India",
+    "luxury chocolate bars",
+    "milk chocolate",
+    "dark chocolate",
+    "crunchy nut chocolate",
+    "pistachio chocolate",
+  ],
   image: SOCIAL_IMAGE_BY_PAGE.collection,
 });
 

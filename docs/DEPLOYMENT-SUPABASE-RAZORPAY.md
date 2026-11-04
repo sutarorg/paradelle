@@ -28,7 +28,7 @@ Put this in Vercel as `DATABASE_URL`. (Drizzle/`pg` Pool works with Supabase poo
 DATABASE_URL="<direct string, port 5432>" ADMIN_EMAIL="admin@paradelle.store" ADMIN_INITIAL_PASSWORD="<unique secure password>" npx tsx scripts/seed.ts
 ```
 The password is read only from the secure environment; existing admin passwords are never overwritten by the seed.
-3. Apply `supabase/migrations/20261104_storefront_media_shipping.sql` in the SQL Editor. It replaces all four product galleries with the supplied image sequence and updates shipping rules/copy to free delivery at ₹499.
+3. Apply `supabase/migrations/20261104_storefront_media_shipping.sql` in the SQL Editor. It replaces galleries for products that already exist and updates shipping rules/copy to free delivery at ₹499. It is safe if the products are not seeded yet: the media update is skipped with a notice, and the current `scripts/seed.ts` inserts the supplied galleries when it creates the products.
 4. *(Optional)* `DATABASE_URL="<direct>" npx drizzle-kit push` afterwards reconciles any microscopic drift against the Drizzle schema — safe either way.
 Verify: **Table Editor → `products` has 4 rows**; **Authentication → Policies** lists e.g. "customers read own orders", "public reads active products".
 
