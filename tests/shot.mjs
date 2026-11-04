@@ -1,0 +1,11 @@
+import { chromium } from "playwright";
+const BASE = process.env.BASE_URL;
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1.5 });
+await page.goto(BASE + "/product/signature-milk", { waitUntil: "networkidle" });
+await page.screenshot({ path: "tests/shots/pdp-new.png" });
+const page2 = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+await page2.goto(BASE + "/collection", { waitUntil: "networkidle" });
+await page2.screenshot({ path: "tests/shots/collection-new.png" });
+await browser.close();
+console.log("shots saved");

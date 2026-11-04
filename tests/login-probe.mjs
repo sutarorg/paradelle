@@ -1,0 +1,16 @@
+import { chromium } from "playwright";
+const BASE = process.env.BASE_URL;
+const browser = await chromium.launch();
+const page = await browser.newPage();
+page.on("response", (r) => { if (r.request().method() === "POST") console.log("POST", r.url(), "→", r.status()); });
+await page.goto(BASE + "/admin/login", { waitUntil: "networkidle" });
+await page.fill('input[name="email"]', "admin@paradelle.store");
+await page.fill('input[name="password"]', "Iskcon@098");
+await page.getByRole("button", { name: /Enter the atelier/ }).click();
+await page.waitForTimeout(5000);
+console.log("URL now:", page.url());
+const body = (await page.textContent("body")) ?? "";
+console.log("error visible:", body.match(/Invalid credentials[^*]{0,60}/)?.[0] ?? body.match(/Too many[^*]{0,40}/)?.[0] ?? "none");
+const cookies = await page.context().cookies();
+console.log("cookies:", cookies.map((c) => c.name).join(","));
+await browser.close();
