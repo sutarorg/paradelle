@@ -1,11 +1,17 @@
-import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/auth-form";
 import { getSessionUser } from "@/lib/auth";
 import { Kicker } from "@/components/ui";
 import { Reveal } from "@/components/reveal";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Sign in" };
+export const metadata = pageMetadata({
+  path: "/login",
+  title: "Sign in to Your PARADELLE Account | PARADELLE CHOCOLATES",
+  description: "Sign in to track PARADELLE orders, review your account and check out faster.",
+  image: SOCIAL_IMAGE_BY_PAGE.login,
+  noindex: true,
+});
 export const dynamic = "force-dynamic";
 
 export default async function LoginPage() {

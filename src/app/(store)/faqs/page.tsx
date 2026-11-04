@@ -1,15 +1,18 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { FAQS } from "@/lib/content";
 import { getContent } from "@/lib/cms";
 import { Reveal } from "@/components/reveal";
 import { Kicker } from "@/components/ui";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
-export const metadata: Metadata = {
-  title: "FAQs",
+export const metadata = pageMetadata({
+  path: "/faqs",
+  title: "FAQs | PARADELLE CHOCOLATES",
   description: "Shipping, payments, storage, gifting and allergen answers — plainly stated.",
-};
+  image: SOCIAL_IMAGE_BY_PAGE.faqs,
+});
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +20,7 @@ export default async function FaqsPage() {
   const faqs = await getContent("faqs", FAQS);
   return (
     <div className="mx-auto max-w-4xl px-4 pb-24 pt-14 sm:px-6 lg:px-8 lg:pt-20">
+      <BreadcrumbJsonLd items={[{ name: "Home", href: "/" }, { name: "FAQs", href: "/faqs" }]} />
       <Reveal>
         <div className="text-center">
           <Kicker className="justify-center">Good questions, honest answers</Kicker>

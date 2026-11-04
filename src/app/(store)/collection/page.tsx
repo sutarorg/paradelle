@@ -1,22 +1,26 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CollectionClient } from "@/components/collection-client";
 import { Reveal } from "@/components/reveal";
 import { Kicker } from "@/components/ui";
 import { getCatalog } from "@/lib/catalog";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "The Collection — Four Signature Bars",
+export const metadata = pageMetadata({
+  path: "/collection",
+  title: "The Collection — Four Signature Bars | PARADELLE CHOCOLATES",
   description:
     "Signature Milk, Signature Dark, Crunchy Nut and Pistachio Filled. Small-batch PARADELLE bars with transparent pricing and insulated delivery across India.",
-};
+  image: SOCIAL_IMAGE_BY_PAGE.collection,
+});
 
 export default async function CollectionPage() {
   const catalog = await getCatalog();
   return (
     <div className="mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8 lg:pt-16">
+      <BreadcrumbJsonLd items={[{ name: "Home", href: "/" }, { name: "Collection", href: "/collection" }]} />
       <Reveal>
         <div className="max-w-2xl">
           <Kicker>The Collection</Kicker>

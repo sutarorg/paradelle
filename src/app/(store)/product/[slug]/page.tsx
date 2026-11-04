@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Plus, ShieldCheck, Truck, RotateCcw, ChevronRight } from "lucide-react";
 import { pricePer100g } from "@/lib/products";
-import { getCatalog, getCatalogProduct } from "@/lib/catalog";
+import { getCatalog, getCatalogProduct, getReservedByProduct } from "@/lib/catalog";
 import { Gallery } from "@/components/gallery";
 import { AddToCart } from "@/components/add-to-cart";
 import { ProductCard } from "@/components/product-card";
@@ -11,6 +11,8 @@ import { Reveal } from "@/components/reveal";
 import { Kicker } from "@/components/ui";
 import { formatINR } from "@/lib/utils";
 import { SITE_URL } from "@/lib/site";
+import { pageMetadata, siteTitle } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
 export const dynamic = "force-dynamic";
 
@@ -18,11 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getCatalogProduct(slug);
   if (!product) return { title: "Product not found" };
-  return {
-    title: product.seoTitle || `${product.name} — ${formatINR(product.price)}`,
+  return pageMetadata({
+    path: `/product/${product.slug}`,
+    title: product.seoTitle || siteTitle(`${product.name} — ${formatINR(product.price)}`),
     description: product.seoDescription || `${product.tagline} ${product.weightGrams} g bar · ${product.cocoaPercent}% cacao · MRP inclusive of taxes.`,
-    openGraph: { images: [product.images.front] },
-  };
+    image: product.images.front,
+  });
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -32,6 +35,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (!product) notFound();
 
   const related = catalog.filter((p) => p.slug !== product.slug).slice(0, 3);
+  const reservations: Record<string, number> = await getReservedByProduct().catch(() => ({}));
+  const availableStock = Math.max(0, product.stock - (reservations[product.slug] ?? 0));
 
   const accordions = [
     {
@@ -109,6 +114,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <div className="pb-20 lg:pb-0">
       {/* Breadcrumbs */}
+      <BreadcrumbJsonLd items={[
+        { name: "Home", href: "/" },
+        { name: "Collection", href: "/collection" },
+        { name: product.shortName, href: `/product/${product.slug}` },
+      ]} />
       <nav aria-label="Breadcrumb" className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
         <ol className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-espresso/65">
           <li><Link href="/" className="transition-colors hover:text-bronze">Home</Link></li>
@@ -155,10 +165,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <p className="mt-1.5 text-[12px] text-espresso/45">
                 ({formatINR(pricePer100g(product))} per 100 g) &middot; Free shipping on orders of ₹1,500+
               </p>
-              {product.stock > 0 && product.stock <= product.lowStockThreshold ? (
-                <p className="mt-2 text-[12px] font-medium text-bronze">Small batch — {product.stock} bars currently at the atelier.</p>
+              {availableStock > 0 && availableStock <= product.lowStockThreshold ? (
+                <p className="mt-2 text-[12px] font-medium text-bronze">Small batch — {availableStock} bars currently at the atelier.</p>
               ) : null}
-              {product.stock <= 0 ? (
+              {availableStock <= 0 ? (
                 <p className="mt-2 text-[12px] font-medium text-bronze">Awaiting the next batch — order now and we reserve yours first out of the mould.</p>
               ) : null}
             </div>
@@ -207,18 +217,21 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             "@context": "https://schema.org",
             "@type": "Product",
             name: product.name,
-            description: product.tagline,
-            image: [`${SITE_URL}${product.images.front}`],
+            description: product.description,
+            image: [new URL(product.images.front, `${SITE_URL}/`).toString()],
+            sku: product.sku,
             brand: { "@type": "Brand", name: "PARADELLE CHOCOLATES" },
-            weight: `${product.weightGrams} g`,
+            weight: { "@type": "QuantitativeValue", value: product.weightGrams, unitCode: "GRM" },
             offers: {
               "@type": "Offer",
+              url: `${SITE_URL}/product/${product.slug}`,
               priceCurrency: "INR",
               price: product.price / 100,
-              availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-              url: `${SITE_URL}/product/${product.slug}`,
+              availability: availableStock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+              itemCondition: "https://schema.org/NewCondition",
+              seller: { "@type": "Organization", name: "PARADELLE CHOCOLATES" },
             },
-          }),
+          }).replace(/</g, "\\u003c"),
         }}
       />
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">

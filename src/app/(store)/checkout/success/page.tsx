@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Check, Lock, Package, ArrowRight, CircleCheck } from "lucide-react";
@@ -10,8 +9,15 @@ import { getCatalog } from "@/lib/catalog";
 import { formatINR } from "@/lib/utils";
 import { ButtonLink, Kicker } from "@/components/ui";
 import { Reveal } from "@/components/reveal";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Order received" };
+export const metadata = pageMetadata({
+  path: "/checkout/success",
+  title: "Order Received | PARADELLE CHOCOLATES",
+  description: "Your PARADELLE order confirmation and order summary.",
+  image: SOCIAL_IMAGE_BY_PAGE.collection,
+  noindex: true,
+});
 export const dynamic = "force-dynamic";
 
 export default async function SuccessPage({ searchParams }: { searchParams: Promise<{ order?: string }> }) {
