@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       const rows = await db.select().from(pincodes).where(eq(pincodes.pincode, c.pincode)).limit(1);
       const pin = rows[0];
       if (!pin || !pin.serviceable) {
-        return bad(`We do not deliver to ${c.pincode} yet — write to hello@paradelle.in and we will try to arrange it.`);
+        return bad(`We do not deliver to ${c.pincode} yet — write to hello@paradelle.store and we will try to arrange it.`);
       }
     }
   } catch { /* pincodes optional during rollout */ }

@@ -30,6 +30,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("contact:message", err);
-    return NextResponse.json({ ok: false, message: "Could not send right now. Please email hello@paradelle.in directly." }, { status: 500 });
+    return NextResponse.json({ ok: false, message: "Could not send right now. Please email hello@paradelle.store directly." }, { status: 500 });
   }
 }

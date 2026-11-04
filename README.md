@@ -66,7 +66,7 @@ Copy `.env.example`. Keys:
 | `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Phase 3 — server-side order creation (`/api/checkout/razorpay` is already wired) |
 | `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Phase 3 — Checkout.js client |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Phase 2 — media storage + admin |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata (production: `https://paradelle.store`) |
 
 ---
 
@@ -119,7 +119,7 @@ public/images/logo.png                                                 ← offic
 
 Wrapper references were used as generation direction only; the eight shipping assets are original AI mockups. Front = sealed wrapper packshot; angle = three-quarter composition with chocolate. To move to Supabase: upload the folder, then prefix `images.*` paths in `src/lib/products.ts` with the public bucket URL.
 
-> ⚠️ **Confirm before launch:** ingredient decks, cocoa percentages, allergen statements and nutrition values in `src/lib/products.ts` are realistic industry-typical placeholders. Replace with laboratory/production specifications. Contact emails (`hello@`, `privacy@paradelle.in`) and the atelier city are configurable brand constants.
+> ⚠️ **Confirm before launch:** ingredient decks, cocoa percentages, allergen statements and nutrition values in `src/lib/products.ts` are realistic industry-typical placeholders. Replace with laboratory/production specifications. Contact emails (`hello@`, `privacy@paradelle.store`) and the atelier city are configurable brand constants.
 
 ## Ethics charter (enforced in Phase 1)
 

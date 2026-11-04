@@ -10,6 +10,7 @@ import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
 import { Kicker } from "@/components/ui";
 import { formatINR } from "@/lib/utils";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [product, catalog] = await Promise.all([getCatalogProduct(slug), getCatalog()]);
+  const catalog = await getCatalog();
+  const product = catalog.find((item) => item.slug === slug);
   if (!product) notFound();
 
   const related = catalog.filter((p) => p.slug !== product.slug).slice(0, 3);
@@ -206,7 +208,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             "@type": "Product",
             name: product.name,
             description: product.tagline,
-            image: [`${process.env.NEXT_PUBLIC_SITE_URL ?? "https://paradelle.in"}${product.images.front}`],
+            image: [`${SITE_URL}${product.images.front}`],
             brand: { "@type": "Brand", name: "PARADELLE CHOCOLATES" },
             weight: `${product.weightGrams} g`,
             offers: {
@@ -214,7 +216,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               priceCurrency: "INR",
               price: product.price / 100,
               availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-              url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://paradelle.in"}/product/${product.slug}`,
+              url: `${SITE_URL}/product/${product.slug}`,
             },
           }),
         }}

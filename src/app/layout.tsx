@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -16,7 +17,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://paradelle.in"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "PARADELLE CHOCOLATES — Crafted for True Indulgence",
     template: "%s | PARADELLE CHOCOLATES",

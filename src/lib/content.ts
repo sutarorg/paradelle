@@ -81,7 +81,7 @@ export const POLICIES: Record<
       {
         heading: "Delays & support",
         body: [
-          "If your tracking has not moved for more than 4 business days, write to us at hello@paradelle.in with your order number and we will investigate with the courier immediately.",
+          "If your tracking has not moved for more than 4 business days, write to us at hello@paradelle.store with your order number and we will investigate with the courier immediately.",
         ],
       },
     ],
@@ -94,7 +94,7 @@ export const POLICIES: Record<
       {
         heading: "Damaged, melted or incorrect orders",
         body: [
-          "If your chocolate arrives melted, heat-bloomed, damaged, or if you received the wrong item, email hello@paradelle.in within 48 hours of delivery with your order number and a photograph of the parcel and product. We will replace the item or refund you in full — whichever you prefer.",
+          "If your chocolate arrives melted, heat-bloomed, damaged, or if you received the wrong item, email hello@paradelle.store within 48 hours of delivery with your order number and a photograph of the parcel and product. We will replace the item or refund you in full — whichever you prefer.",
         ],
       },
       {
@@ -149,7 +149,7 @@ export const POLICIES: Record<
       {
         heading: "Your choices",
         body: [
-          "Email privacy@paradelle.in to access, correct or delete your personal data. Deleting your account removes your profile; order records required for tax and accounting law are retained as mandated, then purged.",
+          "Email privacy@paradelle.store to access, correct or delete your personal data. Deleting your account removes your profile; order records required for tax and accounting law are retained as mandated, then purged.",
         ],
       },
     ],
@@ -192,7 +192,7 @@ export const POLICIES: Record<
       {
         heading: "Contact & disputes",
         body: [
-          "Write to hello@paradelle.in for any concern — we answer within two business days. These terms are governed by the laws of India.",
+          "Write to hello@paradelle.store for any concern — we answer within two business days. These terms are governed by the laws of India.",
         ],
       },
     ],

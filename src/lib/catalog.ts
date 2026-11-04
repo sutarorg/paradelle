@@ -96,16 +96,15 @@ export async function getCatalog(): Promise<CatalogProduct[]> {
   }
 }
 
+/**
+ * Product detail lookup uses the same storefront catalogue as collection cards.
+ * In particular, when the database is empty, getCatalog() intentionally serves
+ * the seed catalogue; looking up the product directly in the database here used
+ * to turn those visible product links into 404s.
+ */
 export async function getCatalogProduct(slug: string): Promise<CatalogProduct | undefined> {
-  try {
-    const rows = await db.select().from(products).where(eq(products.slug, slug)).limit(1);
-    const row = rows[0];
-    if (!row || row.status !== "active") return undefined;
-    return (await attachImages([row]))[0];
-  } catch {
-    const fallback = PRODUCTS.find((p) => p.slug === slug);
-    return fallback ? seedAsCatalog().find((p) => p.slug === slug) : undefined;
-  }
+  const catalog = await getCatalog();
+  return catalog.find((product) => product.slug === slug);
 }
 
 /** Admin catalogue — every status, no fallback. */

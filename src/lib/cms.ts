@@ -29,7 +29,7 @@ export const HOMEPAGE_DEFAULTS: HomepageContent = {
   heroTitle2: "true indulgence.",
   heroSub:
     "Four signature bars — milk, dark, crunchy nut and a pistachio heart — slow-roasted, long-conched and hand-tempered in small weekly batches.",
-  announcement: "Complimentary shipping on orders above ₹1,500 · Small-batch, crafted weekly",
+  announcement: "FREE DELIVERY above ₹1,500",
   storyQuote: "Indulgence is not excess. It is attention — to the bean, the roast, the temper, and the person it is meant for.",
 };
 
