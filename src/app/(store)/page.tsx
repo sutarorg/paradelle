@@ -46,18 +46,20 @@ export default async function HomePage() {
             {
               "@context": "https://schema.org",
               "@type": "Organization",
+              "@id": `${base}/#organization`,
               name: "PARADELLE CHOCOLATES",
               slogan: "Crafted for true indulgence.",
               url: base,
-              logo: `${base}/images/logo.png`,
+              logo: { "@type": "ImageObject", url: `${base}/images/logo.png` },
               contactPoint: { "@type": "ContactPoint", email: "hello@paradelle.store", contactType: "customer service", areaServed: "IN" },
             },
             {
               "@context": "https://schema.org",
               "@type": "WebSite",
+              "@id": `${base}/#website`,
               name: "PARADELLE CHOCOLATES",
               url: base,
-              potentialAction: { "@type": "SearchAction", target: `${base}/collection?q={search_term_string}`, "query-input": "required name=search_term_string" },
+              publisher: { "@id": `${base}/#organization` },
             },
           ]),
         }}

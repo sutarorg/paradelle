@@ -6,16 +6,30 @@ import { POLICIES, type PolicyKey } from "@/lib/content";
 import { getContent, type PolicyContent } from "@/lib/cms";
 import { Reveal } from "@/components/reveal";
 import { Kicker } from "@/components/ui";
+import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
+import { pageMetadata, siteTitle, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
 const KEYS = Object.keys(POLICIES) as PolicyKey[];
+const POLICY_DESCRIPTIONS: Record<PolicyKey, string> = {
+  shipping: "PARADELLE shipping charges, delivery timelines and insulated chocolate packaging across India.",
+  refunds: "Read the PARADELLE refund and replacement policy for melted, damaged or incorrect chocolate orders.",
+  privacy: "How PARADELLE handles account, order and newsletter information, plus customer privacy choices.",
+  terms: "PARADELLE terms for chocolate orders, pricing, availability, prepaid payments and customer accounts.",
+};
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const policy = POLICIES[slug as PolicyKey];
   if (!policy) return { title: "Policy" };
-  return { title: policy.title };
+  const key = slug as PolicyKey;
+  return pageMetadata({
+    path: `/legal/${key}`,
+    title: siteTitle(policy.title),
+    description: POLICY_DESCRIPTIONS[key],
+    image: SOCIAL_IMAGE_BY_PAGE[key],
+  });
 }
 
 export default async function LegalPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,6 +41,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
 
   return (
     <div className="mx-auto max-w-3xl px-4 pb-24 pt-12 sm:px-6 lg:px-8 lg:pt-16">
+      <BreadcrumbJsonLd items={[{ name: "Home", href: "/" }, { name: policy.title, href: `/legal/${slug}` }]} />
       <nav aria-label="Breadcrumb">
         <ol className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-espresso/65">
           <li><Link href="/" className="transition-colors hover:text-bronze">Home</Link></li>

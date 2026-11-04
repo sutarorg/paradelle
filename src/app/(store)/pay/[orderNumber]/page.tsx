@@ -7,8 +7,18 @@ import { orders } from "@/db/schema";
 import { PayNowButton } from "@/components/pay-now";
 import { ButtonLink, Kicker } from "@/components/ui";
 import { formatINR } from "@/lib/utils";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Complete payment", robots: { index: false, follow: false } };
+export async function generateMetadata({ params }: { params: Promise<{ orderNumber: string }> }): Promise<Metadata> {
+  const { orderNumber } = await params;
+  return pageMetadata({
+    path: `/pay/${encodeURIComponent(orderNumber)}`,
+    title: "Complete Your PARADELLE Payment | PARADELLE CHOCOLATES",
+    description: "Complete payment for your reserved PARADELLE chocolate order through Razorpay.",
+    image: SOCIAL_IMAGE_BY_PAGE.collection,
+    noindex: true,
+  });
+}
 export const dynamic = "force-dynamic";
 
 export default async function PayPage({ params }: { params: Promise<{ orderNumber: string }> }) {

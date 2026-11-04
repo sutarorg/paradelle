@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { CartView } from "@/components/cart-view";
 import { Kicker } from "@/components/ui";
 import { Reveal } from "@/components/reveal";
 import { getCatalog, getShippingSettings } from "@/lib/catalog";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Your Bag",
+export const metadata = pageMetadata({
+  path: "/cart",
+  title: "Your Bag | PARADELLE CHOCOLATES",
   description: "Review your selection — transparent totals, shipping shown upfront, secure Razorpay checkout.",
-};
+  image: SOCIAL_IMAGE_BY_PAGE.collection,
+  noindex: true,
+});
 export const dynamic = "force-dynamic";
 
 export default async function CartPage() {

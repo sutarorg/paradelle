@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -6,13 +5,17 @@ import { Reveal } from "@/components/reveal";
 import { Kicker, ButtonLink } from "@/components/ui";
 import { PRODUCTS } from "@/lib/products";
 import { getContent, STORY_DEFAULTS } from "@/lib/cms";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Our Story",
+export const metadata = pageMetadata({
+  path: "/our-story",
+  title: "Our Story | PARADELLE CHOCOLATES",
   description: "Why PARADELLE makes only four bars — and why each one takes its time.",
-};
+  image: SOCIAL_IMAGE_BY_PAGE.story,
+});
 
 const VALUES = [
   { n: "I", title: "Patience over volume", text: "We would rather make fewer bars than faster ones. Every recipe is conched for hours and rested before it is wrapped — the calendar bends to the chocolate, never the reverse." },
@@ -24,6 +27,7 @@ export default async function OurStoryPage() {
   const story = await getContent("story", STORY_DEFAULTS);
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: "Home", href: "/" }, { name: "Our Story", href: "/our-story" }]} />
       <section className="mx-auto max-w-7xl px-4 pb-16 pt-14 sm:px-6 lg:px-8 lg:pt-20">
         <Reveal>
           <div className="max-w-3xl">

@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { Mail, MapPin, Clock3 } from "lucide-react";
 import { ContactForm } from "@/components/contact-form";
 import { Reveal } from "@/components/reveal";
 import { Kicker } from "@/components/ui";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata = pageMetadata({
+  path: "/contact",
+  title: "Contact | PARADELLE CHOCOLATES",
   description: "Write to the PARADELLE atelier — orders, gifting, wholesale and press.",
-};
+  image: SOCIAL_IMAGE_BY_PAGE.contact,
+});
 
 const CHANNELS = [
   { icon: Mail, title: "hello@paradelle.store", text: "Orders, gifting and general notes — answered personally.", href: "mailto:hello@paradelle.store" },
@@ -19,6 +22,7 @@ const CHANNELS = [
 export default function ContactPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 pb-24 pt-14 sm:px-6 lg:px-8 lg:pt-20">
+      <BreadcrumbJsonLd items={[{ name: "Home", href: "/" }, { name: "Contact", href: "/contact" }]} />
       <div className="grid gap-14 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
         <Reveal>
           <div>

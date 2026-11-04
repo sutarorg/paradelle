@@ -12,8 +12,8 @@ export function Gallery({ product }: { product: Product & { imageList?: { id: st
     product.imageList && product.imageList.length > 0
       ? [...product.imageList].sort((a, b) => a.position - b.position).map((i) => ({ src: i.url, label: i.alt }))
       : [
-          { src: product.images.front, label: "photo 1" },
-          { src: product.images.angle, label: "photo 2" },
+          { src: product.images.front, label: "sealed front wrapper" },
+          { src: product.images.angle, label: "three-quarter product view" },
         ];
 
   return (
@@ -23,7 +23,7 @@ export function Gallery({ product }: { product: Product & { imageList?: { id: st
           <Image
             key={s.src}
             src={s.src}
-            alt={`${product.name} — ${s.label}`}
+            alt={s.label.toLowerCase().includes(product.name.toLowerCase()) ? s.label : `${product.name} — ${s.label}`}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             priority={i === 0}

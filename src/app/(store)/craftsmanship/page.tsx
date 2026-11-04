@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { ArrowRight, Thermometer, Timer, FlaskConical, PackageCheck } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { Kicker, ButtonLink } from "@/components/ui";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/breadcrumb-json-ld";
 
-export const metadata: Metadata = {
-  title: "Craftsmanship",
+export const metadata = pageMetadata({
+  path: "/craftsmanship",
+  title: "Craftsmanship | PARADELLE CHOCOLATES",
   description: "Roasting, conching, tempering and wrapping — the four rituals behind every PARADELLE bar.",
-};
+  image: SOCIAL_IMAGE_BY_PAGE.craftsmanship,
+});
 
 const STAGES = [
   {
@@ -54,6 +57,7 @@ const PRINCIPLES = [
 export default function CraftsmanshipPage() {
   return (
     <>
+      <BreadcrumbJsonLd items={[{ name: "Home", href: "/" }, { name: "Craftsmanship", href: "/craftsmanship" }]} />
       <section className="mx-auto max-w-7xl px-4 pb-14 pt-14 sm:px-6 lg:px-8 lg:pt-20">
         <Reveal>
           <div className="max-w-3xl">

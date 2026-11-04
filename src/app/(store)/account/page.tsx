@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -13,8 +12,15 @@ import { getCatalog } from "@/lib/catalog";
 import { formatINR, formatDate, cn } from "@/lib/utils";
 import { Kicker, ButtonLink } from "@/components/ui";
 import { Reveal } from "@/components/reveal";
+import { pageMetadata, SOCIAL_IMAGE_BY_PAGE } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Your Account" };
+export const metadata = pageMetadata({
+  path: "/account",
+  title: "Your PARADELLE Account | PARADELLE CHOCOLATES",
+  description: "Review your PARADELLE order history, delivery tracking and saved addresses.",
+  image: SOCIAL_IMAGE_BY_PAGE.login,
+  noindex: true,
+});
 export const dynamic = "force-dynamic";
 
 const STATUS_STEPS = [

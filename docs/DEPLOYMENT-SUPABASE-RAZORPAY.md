@@ -99,7 +99,23 @@ RESEND_API_KEY=…  RESEND_FROM="PARADELLE <orders@paradelle.store>"   # optiona
 
 ---
 
-## PART C — QUICK REFERENCE: files that implement each step
+## PART C — GOOGLE SEARCH & ANALYTICS
+
+### C1. Google Search Console
+1. Add the verified site property `https://paradelle.store/` in Google Search Console. DNS/domain verification is preferred when you control the DNS zone; otherwise use the URL-prefix property.
+2. For HTML-tag verification, place only the token value from Google's provided tag in `GOOGLE_SITE_VERIFICATION` in the hosting environment. The root layout emits Google's verification metadata only when this value is set. No verification token is stored in the repository.
+3. Redeploy, use Search Console's Verify action, then submit `https://paradelle.store/sitemap.xml` under **Sitemaps**.
+4. Inspect `https://paradelle.store/robots.txt`, test a representative product URL and review indexing/canonical reports after Google recrawls the site.
+5. Keep `NEXT_PUBLIC_SITE_URL=https://paradelle.store` in the production environment. Confirm the domain is attached to the hosting project and HTTPS is active. The app permanently redirects requests on `paradelle.in` and `www.paradelle.store` to the canonical host once those domains resolve to the deployment; configure the aliases/DNS in the hosting provider.
+
+### C2. Google Analytics 4
+1. Create a GA4 property and web data stream in Google's console, then copy the real Measurement ID (`G-…`). No analytics ID is assumed or fabricated here.
+2. Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in the hosting environment and redeploy. The GA tag is disabled when the variable is blank or malformed; page-view events cover initial loads and App Router path changes.
+3. Before enabling it for customers, review the privacy notice and any consent requirements that apply to your audience and analytics configuration. Test Realtime reports and ensure only one page view is recorded per navigation.
+
+---
+
+## PART D — QUICK REFERENCE: files that implement each step
 
 | Capability | Location |
 |---|---|
