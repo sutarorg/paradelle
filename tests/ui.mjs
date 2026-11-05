@@ -53,6 +53,15 @@ for (const vp of VIEWPORTS) {
       for (const label of ["Razorpay secure", "Insulated delivery", "48-hr melt promise"]) {
         record(`${vp.label}px product trust badge visible: ${label}`, await page.getByText(label, { exact: true }).isVisible());
       }
+      const badgesShareRow = await page.evaluate(() => {
+        const labels = ["Razorpay secure", "Insulated delivery", "48-hr melt promise"];
+        const rects = labels.map((label) => {
+          const item = Array.from(document.querySelectorAll("li")).find((element) => element.textContent?.includes(label));
+          return item?.getBoundingClientRect();
+        });
+        return rects.every(Boolean) && Math.max(...rects.map((rect) => rect?.top ?? 0)) - Math.min(...rects.map((rect) => rect?.top ?? 0)) < 2;
+      });
+      record(`${vp.label}px product trust badges are laid out horizontally`, badgesShareRow);
       record(`${vp.label}px product has Add to bag CTA`, await page.getByRole("button", { name: "Add to bag" }).first().isVisible());
       record(`${vp.label}px product has Order Now CTA`, await page.getByRole("button", { name: "Order Now" }).first().isVisible());
     }
