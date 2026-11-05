@@ -179,15 +179,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             <AddToCart product={product} />
 
-            <ul className="mt-8 grid grid-cols-1 gap-3 min-[480px]:grid-cols-3">
+            <ul className="mt-8 grid grid-cols-3 gap-2 sm:gap-3">
               {[
                 { icon: ShieldCheck, label: "Razorpay secure" },
                 { icon: Truck, label: "Insulated delivery" },
                 { icon: RotateCcw, label: "48-hr melt promise" },
               ].map((t) => (
-                <li key={t.label} className="flex min-h-14 min-w-0 items-center justify-center gap-2 rounded-xl border border-espresso/15 bg-cream px-3 py-3 text-center text-[12px] font-semibold leading-tight text-espresso">
+                <li key={t.label} className="flex min-h-14 min-w-0 items-center justify-center gap-1.5 rounded-xl border border-espresso/15 bg-cream px-1.5 py-2 text-center text-[10px] font-semibold leading-tight text-espresso sm:gap-2 sm:px-3 sm:py-3 sm:text-[12px]">
                   <t.icon className="h-4 w-4 shrink-0 text-bronze" strokeWidth={1.7} />
-                  <span className="min-w-0">{t.label}</span>
+                  <span className="min-w-0 break-words">{t.label}</span>
                 </li>
               ))}
             </ul>
